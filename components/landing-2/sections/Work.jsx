@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import Image from 'next/image';
-import { Reveal, ArrowIcon } from '../ui';
-import { L2_GRAD, L2_BTN, L2_BTN_PRIMARY } from '../tokens';
+import { Reveal, PrimaryButton } from '../ui';
+import { L2_GRAD, L2_BTN_CIRCLE } from '../tokens';
 
 const LABELS = {
   en: { challenge: 'Challenge', solution: 'Solution', results: 'Results' },
@@ -52,7 +52,7 @@ function CircleNavButton({ direction, onClick, ariaLabel, className = '' }) {
   return (
     <button
       type="button"
-      className={`group absolute top-1/2 z-[7] grid h-12 w-12 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-[linear-gradient(135deg,#1591ff,#5d4df5)] text-white shadow-[0_10px_26px_rgba(40,94,221,0.32),inset_0_1px_0_rgba(255,255,255,0.25)] transition-[transform,box-shadow] duration-200 hover:scale-110 hover:shadow-[0_14px_32px_rgba(40,94,221,0.42)] active:scale-95 ${className}`}
+      className={`${L2_BTN_CIRCLE} group absolute top-1/2 z-[7] -translate-y-1/2 ${className}`}
       aria-label={ariaLabel}
       onClick={onClick}
     >
@@ -116,18 +116,16 @@ function DetailBlock({ type, label, children }) {
   );
 }
 
-function CaseStudyCta({ label , cn , className = '' }) {
+function CaseStudyCta({ label, cn, className = '' }) {
   return (
-    <a
-      data-work-animate
-      className={`${L2_BTN} ${L2_BTN_PRIMARY} ${cn} absolute bottom-4 end-4 z-[4] inline-flex h-[52px] min-w-[220px] max-w-[calc(100%-2rem)] items-center justify-center rounded-[28px] bg-[linear-gradient(105deg,#079cff_0%,#236cff_48%,#8129f7_100%)] pe-[58px] ps-[22px] text-[0.92rem] font-semibold text-white no-underline shadow-[0_8px_28px_rgba(0,106,255,0.35),inset_0_1px_1px_rgba(255,255,255,0.35)] backdrop-blur-[2px] transition-[transform,box-shadow,filter] duration-[250ms] hover:-translate-y-0.5 hover:brightness-[1.06] hover:shadow-[0_12px_34px_rgba(0,106,255,0.45),inset_0_1px_1px_rgba(255,255,255,0.4)] max-[600px]:bottom-3 max-[600px]:end-3 max-[600px]:h-[48px] max-[600px]:min-w-[200px] max-[600px]:text-[0.85rem] ${className}`}
+    <PrimaryButton
       href="#contact"
+      size="sm"
+      data-work-animate
+      className={`absolute bottom-4 end-4 z-[4] max-w-[calc(100%-2rem)] backdrop-blur-[2px] max-[600px]:bottom-3 max-[600px]:end-3 max-[600px]:h-[48px] max-[600px]:min-w-[200px] max-[600px]:text-[0.85rem] ${cn ?? ''} ${className}`.trim()}
     >
       {label}
-      <span className="absolute end-1.5 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/25 text-white max-[600px]:h-9 max-[600px]:w-9">
-        <ArrowIcon />
-      </span>
-    </a>
+    </PrimaryButton>
   );
 }
 

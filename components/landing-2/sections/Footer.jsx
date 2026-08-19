@@ -1,9 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
-import { useLocale } from 'next-intl';
-import BrandMark, { IconAsset, Reveal, ArrowIcon } from '../ui';
+import { IconAsset, Reveal, ArrowIcon, LocaleSwitch, SiteLogo } from '../ui';import { L2_BTN_ICON } from '../tokens';
 
 const FOOTER_HREFS = {
   links: ['#hero', '#services', '#work', '#about', '#blog', '#contact'],
@@ -66,7 +64,7 @@ function FooterLinkList({ items, hrefs }) {
 
 function ContactIconBox({ children }) {
   return (
-    <div className="grid h-[46px] w-[46px] shrink-0 place-items-center rounded-xl border border-[#234873] bg-[#0a1d38] text-[#2387ff]">
+    <div className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-xl border border-[#234873] bg-[#0a1d38] text-[#2387ff]">
       {children}
     </div>
   );
@@ -74,11 +72,9 @@ function ContactIconBox({ children }) {
 
 export default function Footer({ copy }) {
   const isAr = copy.nav?.home === 'الرئيسية';
-  const locale = useLocale();
   const strengths = STRENGTHS[isAr ? 'ar' : 'en'];
   const global = GLOBAL_COPY[isAr ? 'ar' : 'en'];
   const hours = copy.footer.hours || [];
-  const otherLocale = locale === 'ar' ? 'en' : 'ar';
 
   return (
     <footer
@@ -91,10 +87,7 @@ export default function Footer({ copy }) {
             {/* Brand */}
             <section className="border-[#183457] pe-[35px] max-[850px]:col-span-full max-[850px]:border-b max-[850px]:border-e-0 max-[850px]:pb-9 max-[850px]:pe-0 min-[1201px]:border-e">
               <div className="mb-7 flex items-center gap-4">
-                <div className="grid h-[57px] w-[57px] place-items-center rounded-[14px] bg-[linear-gradient(145deg,#1275ff,#5a28ee)] text-[31px] font-extrabold italic text-white shadow-[0_8px_24px_rgba(41,77,240,0.3)]">
-                  <BrandMark className="h-8 w-auto" />
-                </div>
-                <div className="text-[33px] font-bold tracking-[-1.5px] text-[#f5f8ff]">{copy.brand}</div>
+                <SiteLogo variant="white" alt={copy.brand} className="h-[38px] w-[min(180px,100%)]" />
               </div>
               <GradientRule className="mb-9 h-1 w-[50px] rounded bg-[linear-gradient(90deg,#168dff,#7b2dff)]" />
               <p className="m-0 mb-8 text-[17px] leading-[1.8] text-[#aab9d3]">{copy.footer.about}</p>
@@ -119,7 +112,7 @@ export default function Footer({ copy }) {
                   <p className="m-0 mb-5 text-sm leading-[1.65] text-[#9eb0cd]">{global.desc}</p>
                   <a
                     href="#contact"
-                    className="inline-grid h-[42px] w-[42px] place-items-center rounded-full bg-[linear-gradient(135deg,#1487ff,#7a24ef)] text-white no-underline shadow-[0_8px_20px_rgba(65,54,224,0.28)] transition-transform hover:scale-105"
+                    className={`${L2_BTN_ICON} text-white no-underline`}
                     aria-label={isAr ? 'تواصل معنا' : 'Contact us'}
                   >
                     <ArrowIcon className="h-4 w-4" />
@@ -155,19 +148,19 @@ export default function Footer({ copy }) {
               <GradientRule />
               <div className="mb-6 flex items-center gap-[17px]">
                 <ContactIconBox>
-                  <IconAsset name="phone-call" size={22} scale={1.05} />
+                  <IconAsset name="phone-call" size={28} scale={1.05} />
                 </ContactIconBox>
                 <span className="text-sm text-[#a9b8d1]">{copy.footer.phone}</span>
               </div>
               <div className="mb-6 flex items-center gap-[17px]">
                 <ContactIconBox>
-                  <IconAsset name="archive" size={22} scale={1.05} />
+                  <IconAsset name="archive" size={28} scale={1.05} />
                 </ContactIconBox>
                 <span className="text-sm text-[#a9b8d1]">{copy.footer.email}</span>
               </div>
               <div className="flex items-center gap-[17px]">
                 <ContactIconBox>
-                  <IconAsset name="location-pin" size={22} scale={1.05} />
+                  <IconAsset name="location-pin" size={28} scale={1.05} />
                 </ContactIconBox>
                 <span className="text-sm text-[#a9b8d1]">{copy.footer.address}</span>
               </div>
@@ -188,25 +181,18 @@ export default function Footer({ copy }) {
                     key={social.label}
                     href={social.href}
                     aria-label={social.label}
-                    className="grid h-12 w-12 place-items-center rounded-xl border border-[#24466d] bg-[#07182f] text-[#2587ff] no-underline transition-[border-color,transform] hover:scale-105 hover:border-[#3a7fd4]"
+                    className="grid h-14 w-14 place-items-center rounded-xl border border-[#24466d] bg-[#07182f] text-[#2587ff] no-underline transition-[border-color,transform] hover:scale-105 hover:border-[#3a7fd4]"
                   >
-                    <IconAsset name={social.icon} size={22} scale={1.05} />
+                    <IconAsset name={social.icon} size={26} scale={1.08} />
                   </a>
                 ))}
               </div>
               <div className="my-[38px] h-px bg-[#203c5f]" />
-              <div className="flex h-[59px] w-[205px] max-w-full items-center justify-center gap-6 rounded-[30px] border border-[#2a4e7c] bg-[#06162c] text-[#2c80ff] max-[560px]:w-full">
-                <IconAsset name="network-globe" size={20} scale={1} />
-                <Link href={`/${otherLocale}/landing-2`} className="text-sm text-[#a9b9d3] no-underline hover:text-white">
-                  {isAr ? 'English' : 'عربي'}
-                </Link>
-                <span className="h-7 w-px bg-[#29456a]" aria-hidden="true" />
-                <span className="text-sm font-medium">{isAr ? 'العربية' : 'English'}</span>
-              </div>
+              <LocaleSwitch className="max-[560px]:w-full max-[560px]:justify-center" />
               <div className="mt-12">
                 <div className="mb-4 flex items-center gap-4 text-base font-bold text-[#f5f8ff]">
                   <ContactIconBox>
-                    <IconAsset name="clock" size={20} scale={1} />
+                    <IconAsset name="clock" size={26} scale={1.05} />
                   </ContactIconBox>
                   {copy.footer.hoursTitle}
                 </div>
@@ -221,27 +207,7 @@ export default function Footer({ copy }) {
             </section>
           </div>
         </Reveal>
-
-        <Reveal delay={80}>
-          <section className="mt-[34px] grid min-h-[160px] grid-cols-1 gap-0 rounded-[20px] border border-[#18395f] bg-[linear-gradient(145deg,rgba(7,25,49,0.95),rgba(4,17,35,0.96))] p-5 shadow-[inset_0_1px_rgba(122,176,255,0.04),0_12px_30px_rgba(0,0,0,0.2)] max-[850px]:grid-cols-2 max-[1200px]:grid-cols-3 min-[1201px]:grid-cols-5">
-            {strengths.map((item, index) => (
-              <div
-                key={item.title}
-                className={`flex items-center gap-[17px] px-[18px] py-3 max-[850px]:border-b max-[850px]:border-[#1b3a60] max-[560px]:px-2.5 ${
-                  index < strengths.length - 1 ? 'min-[851px]:border-e min-[851px]:border-[#1b3a60] max-[1200px]:[&:nth-child(3)]:border-e-0' : ''
-                }`}
-              >
-                <div className="grid h-[73px] w-[73px] shrink-0 place-items-center rounded-full border border-[#244a79] bg-[#06172f]">
-                  <IconAsset name={item.icon} size={34} scale={1.08} />
-                </div>
-                <div>
-                  <b className="mb-2 block text-sm text-[#f5f8ff]">{item.title}</b>
-                  <p className="m-0 text-xs leading-[1.55] text-[#9eafca]">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </section>
-        </Reveal>
+ 
 
         <Reveal delay={120}>
           <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-[#203c5f] pt-6 text-sm text-[#9eafca] max-[560px]:flex-col max-[560px]:items-start">

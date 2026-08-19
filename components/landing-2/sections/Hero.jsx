@@ -2,22 +2,23 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { ArrowIcon } from '../ui';
-import { L2_GRAD, L2_BTN, L2_BTN_PRIMARY } from '../tokens';
+import { ArrowIcon, PrimaryButton } from '../ui';
+import { L2_GRAD } from '../tokens';
 import { useInView } from '../hooks';
 import { useScrollFrames } from '../../landing-1/hooks';
 
-const FRAME_COUNT = 161;
+const FRAME_COUNT = 100;
+const FRAME_STEP_SECONDS = 0.08;
 const getPath = (n) => {
-  const seconds = ((n - 1) * 0.05).toFixed(2);
-  return `/hero-4-frames/frame_${String(n).padStart(4, '0')}_${seconds}s.png`;
+  const seconds = ((n - 1) * FRAME_STEP_SECONDS).toFixed(2);
+  return `/hero-5-frames/frame_${String(n).padStart(4, '0')}_${seconds}s.png`;
 };
 
 const HERO_STAGE_BG =
   "before:pointer-events-none before:absolute before:inset-0 before:z-[1] before:content-[''] before:bg-[radial-gradient(650px_520px_at_73%_38%,rgba(5,52,123,0.13),transparent_67%),radial-gradient(450px_360px_at_88%_15%,rgba(79,13,150,0.07),transparent_70%),radial-gradient(2px_2px_at_73%_20%,rgba(0,172,255,0.7),transparent),radial-gradient(1px_1px_at_66%_55%,rgba(74,145,255,0.45),transparent),radial-gradient(1px_1px_at_81%_67%,rgba(110,44,255,0.45),transparent)] rtl:before:bg-[radial-gradient(650px_520px_at_27%_38%,rgba(5,52,123,0.13),transparent_67%),radial-gradient(450px_360px_at_12%_15%,rgba(79,13,150,0.07),transparent_70%),radial-gradient(2px_2px_at_27%_20%,rgba(0,172,255,0.7),transparent),radial-gradient(1px_1px_at_34%_55%,rgba(74,145,255,0.45),transparent),radial-gradient(1px_1px_at_19%_67%,rgba(110,44,255,0.45),transparent)]";
 
 const BTN_SECONDARY =
-  'gap-3 border border-[rgba(77,122,178,0.57)] bg-[rgba(1,8,16,0.32)] text-[#f2f3f7] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] hover:border-[rgba(8,165,255,0.7)] hover:bg-[rgba(7,20,36,0.55)]';
+  'relative inline-flex h-[66px] min-w-[min(247px,100%)] cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-[35px] border border-[rgba(77,122,178,0.57)] bg-[rgba(1,8,16,0.32)] px-7 text-[1.2rem] font-semibold leading-none text-[#f2f3f7] no-underline shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition-[transform,box-shadow,filter] duration-[250ms] hover:-translate-y-0.5 hover:border-[rgba(8,165,255,0.7)] hover:bg-[rgba(7,20,36,0.55)] max-[800px]:h-[58px] max-[800px]:w-full max-[800px]:text-[1.05rem]';
 
 function Reveal({ children, className = '', delay = 0 }) {
   const [ref, inView] = useInView();
@@ -40,6 +41,7 @@ function setHeroVars(el, vars) {
 }
 
 export default function Hero({ copy }) {
+  const pinRef = useRef(null);
   const {
     sectionRef,
     canvasRef,
@@ -49,6 +51,9 @@ export default function Hero({ copy }) {
   } = useScrollFrames({
     frameCount: FRAME_COUNT,
     getPath,
+    sizeTo: 'parent',
+    pinRef,
+    pinMode: 'scrollTrigger',
   });
 
   const copyRef = useRef(null);
@@ -162,13 +167,11 @@ export default function Hero({ copy }) {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative h-[420vh] [background:var(--l2-dark-gradient)] max-[900px]:h-[340vh] max-[800px]:h-[300vh]"
+      className="l2-scroll-animation [background:var(--l2-dark-gradient)]"
       aria-labelledby="l2-hero-heading"
     >
-      <div
-        className={`sticky top-0 z-[1] flex h-screen h-[100dvh] w-full flex-col overflow-hidden [background:var(--l2-dark-gradient)] ${HERO_STAGE_BG}`}
-      >
-        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      <div ref={pinRef} className={`l2-scroll-pin flex flex-col ${HERO_STAGE_BG}`}>
+        <canvas ref={canvasRef} className="absolute inset-0 z-0 h-full w-full" />
           <div
             className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(105%_82%_at_78%_42%,rgba(8,161,255,0.10),transparent_24%),radial-gradient(82%_58%_at_82%_68%,rgba(129,41,247,0.09),transparent_22%),linear-gradient(90deg,rgba(1,5,12,0.44)_0%,rgba(1,5,12,0.18)_22%,rgba(1,5,12,0.03)_48%,rgba(1,5,12,0.14)_74%,rgba(1,5,12,0.38)_100%),linear-gradient(180deg,rgba(1,5,12,0.14)_0%,rgba(1,5,12,0.03)_28%,rgba(1,5,12,0.12)_100%)] max-[1100px]:bg-[linear-gradient(180deg,rgba(1,5,12,0.22),rgba(1,5,12,0.36)),radial-gradient(120%_80%_at_75%_42%,rgba(8,161,255,0.10),transparent_24%)]"
             aria-hidden="true"
@@ -224,17 +227,11 @@ export default function Hero({ copy }) {
                 </Reveal>
                 <Reveal className="mt-[46px] flex flex-wrap gap-6 max-[800px]:mt-8" delay={200}>
                   <div ref={actionsRef} className="flex w-full flex-wrap gap-6">
-                    <a
-                      className={`${L2_BTN} ${L2_BTN_PRIMARY}`}
-                      href="#contact"
-                    >
+                    <PrimaryButton href="#contact" size="lg">
                       {copy.hero.ctaPrimary}
-                      <span className="absolute end-2 grid h-12 w-12 place-items-center rounded-full bg-[#f8f9ff] text-[#4d42ff]">
-                        <ArrowIcon />
-                      </span>
-                    </a>
+                    </PrimaryButton>
                     <a
-                      className={`${L2_BTN} ${BTN_SECONDARY}`}
+                      className={BTN_SECONDARY}
                       href="#work"
                     >
                       {copy.hero.ctaSecondary}
@@ -254,7 +251,7 @@ export default function Hero({ copy }) {
               </div>
               <div className="h-0.5 w-[min(320px,calc(100%-48px))] overflow-hidden bg-[rgba(255,255,255,0.12)]">
                 <div
-                  className="h-full bg-[var(--l2-btn-gradient)]"
+                  className="h-full bg-[linear-gradient(105deg,#079cff_0%,#236cff_48%,#8129f7_100%)]"
                   style={{ width: `${Math.round(loadProgress * 100)}%` }}
                 />
               </div>

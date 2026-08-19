@@ -1,6 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+function getHeroScrollDistancePx() {
+  const w = window.innerWidth;
+  const vh = w <= 800 ? 280 : w <= 900 ? 260 : 320;
+  return (vh / 100) * window.innerHeight;
+}
 
 export function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -205,6 +213,8 @@ export function useScrollFrames({
   containScale = 1,
   playUntil = 1,
   progressMode = 'section',
+  pinRef = null,
+  pinMode = 'sticky',
 }) {
   const sectionRef = useRef(null);
   const canvasRef = useRef(null);
@@ -339,13 +349,93 @@ export function useScrollFrames({
     };
   }, [resizeCanvas, sizeTo]);
 
+  const applyProgress = useCallback((rawProgress) => {
+    if (!loadedRef.current) return;
+
+    const progress = playUntil > 0 && playUntil < 1
+      ? Math.min(1, rawProgress / playUntil)
+      : Math.min(1, Math.max(0, rawProgress));
+
+    const nextFrame = Math.min(frameCount - 1, Math.floor(progress * frameCount));
+    if (nextFrame !== lastFrameRef.current) {
+      lastFrameRef.current = nextFrame;
+      drawFrame(nextFrame);
+    }
+
+    if (seqReadoutRef.current) {
+      seqReadoutRef.current.textContent = `SEQ ${String(nextFrame + 1).padStart(3, '0')} / ${frameCount}`;
+    }
+
+    if (progressFillRef.current) {
+      progressFillRef.current.style.transform = `scaleX(${progress})`;
+    }
+
+    if (onProgressRef.current) onProgressRef.current(progress);
+
+    const nextVisible = new Set();
+    cards.forEach((card) => {
+      if (progress >= card.show && progress <= card.hide) nextVisible.add(card.id);
+    });
+    const ids = [...nextVisible].sort().join(',');
+    if (ids !== prevVisibleIdsRef.current) {
+      prevVisibleIdsRef.current = ids;
+      setVisibleCards(nextVisible);
+    }
+  }, [cards, drawFrame, frameCount, playUntil]);
+
   useEffect(() => {
     if (!loaded) return;
     drawFrame(0);
     lastFrameRef.current = 0;
-  }, [loaded, drawFrame]);
+
+    if (pinMode === 'scrollTrigger') {
+      ScrollTrigger.refresh(true);
+      const section = sectionRef.current;
+      const heroTrigger = ScrollTrigger.getAll().find((trigger) => trigger.trigger === section);
+      if (heroTrigger) applyProgress(heroTrigger.progress);
+    }
+  }, [loaded, drawFrame, applyProgress, pinMode]);
 
   useEffect(() => {
+    if (pinMode === 'scrollTrigger') {
+      gsap.registerPlugin(ScrollTrigger);
+      ScrollTrigger.config({ ignoreMobileResize: true });
+
+      const section = sectionRef.current;
+      const pin = pinRef?.current || canvasRef.current?.parentElement;
+      if (!section || !pin) return undefined;
+
+      section.classList.add('is-hero-scroll-pinned');
+
+      const ctx = gsap.context(() => {
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${getHeroScrollDistancePx()}`,
+          pin,
+          pinSpacing: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          fastScrollEnd: true,
+          onUpdate: (self) => applyProgress(self.progress),
+        });
+      }, section);
+
+      const refresh = () => {
+        ScrollTrigger.refresh(true);
+      };
+      requestAnimationFrame(refresh);
+      window.addEventListener('resize', refresh);
+      window.addEventListener('load', refresh);
+
+      return () => {
+        window.removeEventListener('resize', refresh);
+        window.removeEventListener('load', refresh);
+        section.classList.remove('is-hero-scroll-pinned');
+        ctx.revert();
+      };
+    }
+
     const handleScroll = () => {
       if (tickingRef.current) return;
       tickingRef.current = true;
@@ -362,42 +452,19 @@ export function useScrollFrames({
           : scrollable <= 0
             ? 0
             : Math.min(1, Math.max(0, -rect.top / scrollable));
-        const progress = playUntil > 0 && playUntil < 1
-          ? Math.min(1, raw / playUntil)
-          : raw;
 
-        const nextFrame = Math.min(frameCount - 1, Math.floor(progress * frameCount));
-        if (nextFrame !== lastFrameRef.current) {
-          lastFrameRef.current = nextFrame;
-          drawFrame(nextFrame);
-        }
-
-        if (seqReadoutRef.current) {
-          seqReadoutRef.current.textContent = `SEQ ${String(nextFrame + 1).padStart(3, '0')} / ${frameCount}`;
-        }
-
-        if (progressFillRef.current) {
-          progressFillRef.current.style.transform = `scaleX(${progress})`;
-        }
-
-        if (onProgressRef.current) onProgressRef.current(progress);
-
-        const nextVisible = new Set();
-        cards.forEach((card) => {
-          if (progress >= card.show && progress <= card.hide) nextVisible.add(card.id);
-        });
-        const ids = [...nextVisible].sort().join(',');
-        if (ids !== prevVisibleIdsRef.current) {
-          prevVisibleIdsRef.current = ids;
-          setVisibleCards(nextVisible);
-        }
+        applyProgress(raw);
       });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [cards, drawFrame, frameCount, playUntil, progressMode]);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [applyProgress, pinMode, pinRef, progressMode]);
 
   return {
     sectionRef,

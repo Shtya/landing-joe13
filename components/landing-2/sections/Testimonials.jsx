@@ -200,9 +200,12 @@ export default function Testimonials({ copy }) {
     const syncLayout = () => {
       const pinHeight = Math.max(0, window.innerHeight - PIN_GAP);
       pin.style.height = `${pinHeight}px`;
+      return getOverflow();
+    };
+
+    const applyTrackProgress = (progress) => {
       const overflow = getOverflow();
-      section.style.height = `${pinHeight + overflow}px`;
-      return overflow;
+      gsap.set(track, { y: -progress * overflow, force3D: true });
     };
 
     const updateCards = () => {
@@ -217,22 +220,28 @@ export default function Testimonials({ copy }) {
 
     const ctx = gsap.context(() => {
       syncLayout();
+      gsap.set(track, { y: 0, force3D: true });
       updateCards();
 
-      gsap.to(track, {
-        y: () => -getOverflow(),
-        ease: 'none',
-        force3D: true,
-        scrollTrigger: {
-          trigger: section,
-          start: `top ${PIN_GAP}px`,
-          end: () => `+=${Math.max(getOverflow(), 1)}`,
-          scrub: true,
-          invalidateOnRefresh: true,
-          onRefreshInit: syncLayout,
-          onUpdate: updateCards,
-          onRefresh: updateCards,
+      ScrollTrigger.create({
+        trigger: section,
+        start: `top ${PIN_GAP}px`,
+        end: () => `+=${Math.max(getOverflow(), 1)}`,
+        pin,
+        pinSpacing: true,
+        anticipatePin: 1,
+        scrub: true,
+        invalidateOnRefresh: true,
+        onRefreshInit: syncLayout,
+        onUpdate: (self) => {
+          applyTrackProgress(self.progress);
+          updateCards();
         },
+        onRefresh: (self) => {
+          applyTrackProgress(self.progress);
+          updateCards();
+        },
+        id: 'l2-testimonials',
       });
 
       ScrollTrigger.create({
@@ -248,8 +257,10 @@ export default function Testimonials({ copy }) {
     const refresh = () => {
       if (cancelled) return;
       syncLayout();
+      const st = ScrollTrigger.getById('l2-testimonials');
+      applyTrackProgress(st?.progress ?? 0);
       updateCards();
-      ScrollTrigger.refresh();
+      ScrollTrigger.refresh(true);
     };
     const raf = requestAnimationFrame(() => {
       requestAnimationFrame(refresh);
@@ -273,12 +284,11 @@ export default function Testimonials({ copy }) {
       ref={sectionRef}
       className="relative overflow-visible px-[clamp(1.25rem,3.6vw,3.3rem)] pb-0 pt-0 text-[#f4f7fd] bg-[radial-gradient(650px_520px_at_73%_38%,rgba(5,52,123,0.13),transparent_67%),radial-gradient(450px_360px_at_88%_15%,rgba(79,13,150,0.07),transparent_70%),linear-gradient(180deg,#01050c_0%,#00040a_100%)] after:pointer-events-none after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(0,0,0,0.05),transparent_40%,rgba(0,23,55,0.10))] after:content-[''] max-md:px-5"
       aria-labelledby="l2t-heading"
-      style={{ minHeight: `calc(100vh - ${PIN_GAP}px)` }}
     >
       <div
         ref={pinRef}
-        className="sticky top-[10px] z-[5] flex flex-col overflow-hidden pb-7 pt-[60px] "
-        style={{ height: `calc(100vh - ${PIN_GAP}px)` }}
+        className="relative z-[5] flex flex-col overflow-hidden pb-7 pt-[60px]"
+        style={{ height: `calc(100dvh - ${PIN_GAP}px)` }}
       >
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <div className="absolute left-[13px] top-[30px] h-[130px] w-[145px] bg-[radial-gradient(circle,#197bd8_1.45px,transparent_1.65px)] bg-[length:19px_19px] opacity-80" />

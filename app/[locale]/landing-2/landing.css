@@ -15,12 +15,76 @@
 html:has(.landing-2),
 body:has(.landing-2) {
   background: #00040a;
-  overflow-x: clip;
+  overflow-x: hidden;
+}
+
+.landing-2 {
+  overflow-x: hidden;
+}
+
+.landing-2 main {
+  overflow: visible;
+}
+
+.l2-scroll-animation {
+  position: relative;
+  display: block;
+  z-index: 20;
+  isolation: isolate;
+}
+
+.l2-scroll-animation.is-hero-scroll-pinned {
+  min-height: 100dvh;
+  overflow: visible;
+}
+
+.l2-scroll-animation.is-hero-scroll-pinned .l2-scroll-pin {
+  overflow: hidden;
+}
+
+.l2-scroll-pin {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--l2-dark-gradient);
+}
+
+/* Fallback sticky mode (landing-1 hero) */
+.l2-scroll-animation:not(.is-hero-scroll-pinned) {
+  height: 420vh;
+}
+
+.l2-scroll-animation:not(.is-hero-scroll-pinned) .l2-scroll-pin {
+  position: sticky;
+  top: 0;
+}
+
+@media (max-width: 900px) {
+  .l2-scroll-animation:not(.is-hero-scroll-pinned) {
+    height: 340vh;
+  }
+}
+
+@media (max-width: 800px) {
+  .l2-scroll-animation:not(.is-hero-scroll-pinned) {
+    height: 300vh;
+  }
+}
+
+.l2-btn-primary {
+  background-image: var(--l2-btn-gradient);
 }
 
 .landing-2 ::selection {
   background: #078cff;
   color: #fff;
+}
+
+#testimonials.is-scroll-pinned {
+  overflow: visible;
 }
 
 #testimonials.is-scroll-pinned [data-review-card] {

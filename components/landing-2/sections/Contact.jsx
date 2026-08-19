@@ -1,8 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Reveal, ArrowIcon, IconAsset } from '../ui';
-import BrandMark from '../ui';
+import { Reveal, PrimaryButton, IconAsset, SiteLogo } from '../ui';
 import { L2_GRAD } from '../tokens';
 
 const COPY = {
@@ -188,9 +187,8 @@ export default function Contact({ copy }) {
       <Reveal delay={70}>
         <div className="relative z-[4] mx-auto mt-9 grid h-auto min-h-[641px] w-[1125px] max-w-[92vw] grid-cols-1 overflow-visible rounded-[28px] border border-[#e0e8f7] bg-white/[0.92] shadow-[0_18px_42px_rgba(35,76,151,0.11)] min-[1001px]:grid-cols-[296px_1fr]">
           <aside className="-m-px rounded-[28px] border border-[#e2e9f7] bg-[linear-gradient(145deg,#fbfdff,#f5f8ff)] px-7 pb-[30px] pt-12 shadow-[8px_0_28px_rgba(48,89,164,0.055)] min-[1001px]:me-0 min-[1001px]:rounded-e-none max-[1000px]:rounded-b-none max-[1000px]:rounded-t-[25px] max-[1000px]:px-[30px] max-[1000px]:py-[35px] max-[650px]:px-[22px]">
-            <div className="relative mx-auto mb-[34px] grid h-[150px] w-[150px] place-items-center rounded-full bg-white  ">
-              {/* <BrandMark className="relative z-[1] h-[52px] w-auto" /> */}
-                <Image src="/logos/logo-black.png" alt="" fill sizes="115px" className="object-contain" />
+            <div className="relative mx-auto mb-[34px] grid h-[150px] w-[150px] place-items-center rounded-full bg-white">
+              <SiteLogo variant="black" alt={copy.brand} className="relative z-[1] h-[52px] w-[115px]" />
             </div>
             <h3 className="mb-[22px] text-[27px] font-bold leading-[1.28] tracking-[-0.8px] text-[#08183b]">
               {t.infoTitle}{' '}
@@ -296,15 +294,13 @@ export default function Contact({ copy }) {
             </div>
 
             <div className="mt-[22px] flex items-center justify-between gap-[18px] max-[650px]:flex-col max-[650px]:items-start">
-              <button
+              <PrimaryButton
                 type="submit"
-                className="inline-flex h-[53px] w-[335px] max-w-full items-center gap-[15px] rounded-[27px] border-0 bg-[linear-gradient(95deg,#0d69ff,#8a18ee)] px-[7px] pe-[18px] text-sm font-bold tracking-[0.8px] text-white shadow-[0_10px_25px_rgba(65,54,224,0.24)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(65,54,224,0.32)] max-[650px]:w-full max-[650px]:justify-center"
+                size="sm"
+                className="w-[335px] max-w-full text-sm font-bold tracking-[0.8px] max-[650px]:w-full"
               >
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-[#3061ff]">
-                  <ArrowIcon className="h-5 w-5" />
-                </span>
                 {t.cta}
-              </button>
+              </PrimaryButton>
               <div className="flex items-center gap-2 text-xs text-[#7683a2] max-[650px]:self-end">
                 <ClockBadgeIcon />
                 <span>

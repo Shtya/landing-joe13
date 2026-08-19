@@ -36,7 +36,7 @@ export default function LandingTwo() {
 
   return (
     <div
-      className="landing-2 relative min-h-screen overflow-x-clip bg-[#00040a] font-[Inter,'Plus_Jakarta_Sans',ui-sans-serif,system-ui,sans-serif] text-[var(--l2-white)] antialiased rtl:font-[Cairo,Inter,ui-sans-serif,system-ui,sans-serif]"
+      className="landing-2 relative min-h-screen bg-[#00040a] font-[Inter,'Plus_Jakarta_Sans',ui-sans-serif,system-ui,sans-serif] text-[var(--l2-white)] antialiased rtl:font-[Cairo,Inter,ui-sans-serif,system-ui,sans-serif]"
       dir={locale === 'ar' ? 'rtl' : 'ltr'}
     >
       <LandingNav copy={copy} />

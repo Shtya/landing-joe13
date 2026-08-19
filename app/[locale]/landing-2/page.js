@@ -1,15 +1,5 @@
-import LandingTwo from '@/components/landing-2/LandingTwo';
-import { getLandingTwoContent } from '@/components/landing-2/content';
-import './landing.css';
+import { redirect } from 'next/navigation';
 
-export async function generateMetadata({ params: { locale } }) {
-  const copy = getLandingTwoContent(locale);
-  return {
-    title: copy.metaTitle,
-    description: copy.metaDescription,
-  };
-}
-
-export default function LandingTwoPage() {
-  return <LandingTwo />;
+export default function LandingTwoRedirect({ params: { locale } }) {
+  redirect(`/${locale}`);
 }
