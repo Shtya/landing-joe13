@@ -82,22 +82,3 @@ body:has(.landing-2) {
   background: #078cff;
   color: #fff;
 }
-
-#testimonials.is-scroll-pinned {
-  overflow: visible;
-}
-
-#testimonials.is-scroll-pinned [data-review-card] {
-  opacity: var(--enter, 1);
-  transform: translate3d(0, calc((1 - var(--enter, 1)) * 40px), 0)
-    scale(calc(0.96 + var(--enter, 1) * 0.04));
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #testimonials.is-scroll-pinned [data-review-card] {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}

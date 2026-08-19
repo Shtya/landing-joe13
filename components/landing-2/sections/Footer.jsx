@@ -81,7 +81,7 @@ export default function Footer({ copy }) {
       id="footer"
       className="overflow-hidden bg-[radial-gradient(700px_380px_at_50%_40%,rgba(19,76,164,0.09),transparent_72%),linear-gradient(180deg,#010610,#020817)] px-[15px] pb-[88px] pt-[94px] max-[560px]:px-2 max-[560px]:pb-5 max-[560px]:pt-5"
     >
-      <div className="mx-auto min-h-[840px] w-full max-w-[1506px] rounded-[31px] border border-[#163253] bg-[linear-gradient(145deg,rgba(4,17,35,0.97),rgba(2,11,25,0.99))] px-[51px] py-12 shadow-[inset_0_1px_rgba(122,173,255,0.06),0_28px_70px_rgba(0,0,0,0.38)] max-[1200px]:w-[96%] max-[1200px]:px-[30px] max-[560px]:rounded-[22px] max-[560px]:px-5 max-[560px]:py-7">
+      <div className="mx-auto min-h-fit w-full max-w-[1506px] rounded-[31px] border border-[#163253] bg-[linear-gradient(145deg,rgba(4,17,35,0.97),rgba(2,11,25,0.99))] px-[51px] py-12 shadow-[inset_0_1px_rgba(122,173,255,0.06),0_28px_70px_rgba(0,0,0,0.38)] max-[1200px]:w-[96%] max-[1200px]:px-[30px] max-[560px]:rounded-[22px] max-[560px]:px-5 max-[560px]:py-7">
         <Reveal>
           <div className="grid min-h-[525px] grid-cols-1 gap-0 max-[850px]:grid-cols-2 max-[1200px]:grid-cols-[250px_repeat(4,minmax(0,1fr))] min-[1201px]:grid-cols-[272px_repeat(5,minmax(0,1fr))] max-[850px]:gap-y-8 max-[560px]:grid-cols-1">
             {/* Brand */}
@@ -92,7 +92,7 @@ export default function Footer({ copy }) {
               <GradientRule className="mb-9 h-1 w-[50px] rounded bg-[linear-gradient(90deg,#168dff,#7b2dff)]" />
               <p className="m-0 mb-8 text-[17px] leading-[1.8] text-[#aab9d3]">{copy.footer.about}</p>
 
-              <div className="relative min-h-[295px] w-full max-w-[270px] overflow-hidden rounded-[21px] border border-[#1d4a83] bg-[linear-gradient(150deg,rgba(9,29,57,0.93),rgba(3,16,34,0.96))] p-7 shadow-[inset_0_1px_rgba(139,189,255,0.08),0_12px_30px_rgba(0,0,0,0.22)] max-[560px]:max-w-none">
+              <div className="relative min-h-[295px] w-full max-w-[270px] overflow-hidden rounded-[21px] p-7   max-[560px]:max-w-none">
                 <Image
                   src="/icons/world_image.png"
                   alt=""
@@ -104,7 +104,7 @@ export default function Footer({ copy }) {
                 <div className="absolute inset-0 bg-[rgba(2,12,25,0.43)]" aria-hidden="true" />
                 <div className="relative z-[2]">
                   <div className="mb-6 grid h-[46px] w-[46px] place-items-center rounded-[11px] border border-[#285083] bg-[#0b2447]">
-                    <IconAsset name="network-globe" size={26} scale={1.05} />
+                    <IconAsset name="network-globe" size={40} scale={1} />
                   </div>
                   <h3 className="mb-2.5 text-2xl font-bold text-[#f5f8ff]">
                     {global.title} <span className="text-[#3673ff]">{global.grad}</span>
@@ -148,19 +148,19 @@ export default function Footer({ copy }) {
               <GradientRule />
               <div className="mb-6 flex items-center gap-[17px]">
                 <ContactIconBox>
-                  <IconAsset name="phone-call" size={28} scale={1.05} />
+                  <IconAsset name="phone-call" size={40} scale={1} />
                 </ContactIconBox>
                 <span className="text-sm text-[#a9b8d1]">{copy.footer.phone}</span>
               </div>
               <div className="mb-6 flex items-center gap-[17px]">
                 <ContactIconBox>
-                  <IconAsset name="archive" size={28} scale={1.05} />
+                  <IconAsset name="archive" size={40} scale={1} />
                 </ContactIconBox>
                 <span className="text-sm text-[#a9b8d1]">{copy.footer.email}</span>
               </div>
               <div className="flex items-center gap-[17px]">
                 <ContactIconBox>
-                  <IconAsset name="location-pin" size={28} scale={1.05} />
+                  <IconAsset name="location-pin" size={40} scale={1} />
                 </ContactIconBox>
                 <span className="text-sm text-[#a9b8d1]">{copy.footer.address}</span>
               </div>
@@ -183,7 +183,7 @@ export default function Footer({ copy }) {
                     aria-label={social.label}
                     className="grid h-14 w-14 place-items-center rounded-xl border border-[#24466d] bg-[#07182f] text-[#2587ff] no-underline transition-[border-color,transform] hover:scale-105 hover:border-[#3a7fd4]"
                   >
-                    <IconAsset name={social.icon} size={26} scale={1.08} />
+                    <IconAsset name={social.icon} size={40} scale={1.08} />
                   </a>
                 ))}
               </div>
@@ -192,7 +192,7 @@ export default function Footer({ copy }) {
               <div className="mt-12">
                 <div className="mb-4 flex items-center gap-4 text-base font-bold text-[#f5f8ff]">
                   <ContactIconBox>
-                    <IconAsset name="clock" size={26} scale={1.05} />
+                    <IconAsset name="clock" size={40} scale={1} />
                   </ContactIconBox>
                   {copy.footer.hoursTitle}
                 </div>
@@ -208,13 +208,7 @@ export default function Footer({ copy }) {
           </div>
         </Reveal>
  
-
-        <Reveal delay={120}>
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-[#203c5f] pt-6 text-sm text-[#9eafca] max-[560px]:flex-col max-[560px]:items-start">
-            <span>{copy.footer.copyright?.replace('Nexus', copy.brand) ?? `© 2026 ${copy.brand}`}</span>
-            <span>{copy.footer.made}</span>
-          </div>
-        </Reveal>
+ 
       </div>
     </footer>
   );
