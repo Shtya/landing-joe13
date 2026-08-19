@@ -1,0 +1,279 @@
+{
+  "nav": {
+    "services": "Services",
+    "work": "Our Work",
+    "about": "About",
+    "contact": "Contact",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "badge": "✦ Now in v2.0",
+    "headline": "Software That",
+    "headlineAccent": "Moves the World",
+    "subheadline": "We architect digital experiences that scale to millions, perform at nanosecond precision, and evolve with your ambitions.",
+    "ctaPrimary": "Start Your Project",
+    "ctaSecondary": "View Our Work",
+    "stat1": "10ms avg response",
+    "stat2": "99.99% uptime",
+    "stat3": "2M+ requests served"
+  },
+  "about": {
+    "badge": "About Nexus",
+    "headline": "We don't build software. We engineer futures.",
+    "body": "Nexus is a collective of world-class engineers, designers, and architects who believe that exceptional software changes the trajectory of businesses. We've built for startups that became unicorns and enterprises that redefined their industries.",
+    "pill1": "Transparent",
+    "pill2": "Scalable",
+    "pill3": "Human-Centered"
+  },
+  "services": {
+    "badge": "What We Build",
+    "headline": "Full-Spectrum Engineering",
+    "subheadline": "From pixel to packet, we own the entire stack.",
+    "items": [
+      { "category": "Web", "title": "Web Development", "description": "Blazing-fast web applications with modern frameworks and server-side rendering." },
+      { "category": "Mobile", "title": "Mobile Apps", "description": "Native and cross-platform apps that delight users on every device." },
+      { "category": "Cloud", "title": "Cloud Infrastructure", "description": "Scalable, resilient infrastructure engineered for zero-downtime deployments." },
+      { "category": "AI", "title": "AI Integration", "description": "Intelligent automation and ML pipelines that transform raw data into decisions." },
+      { "category": "DevOps", "title": "DevOps & CI/CD", "description": "Continuous delivery pipelines that ship code 10× faster with confidence." },
+      { "category": "API", "title": "API Design", "description": "RESTful and GraphQL APIs built for developer experience and performance." }
+    ]
+  },
+  "features": {
+    "badge": "Why Nexus",
+    "headline": "Architecture That Breathes",
+    "items": [
+      { "title": "Infinite Scalability", "body": "Our microservice architectures handle traffic spikes from 100 to 100 million users without a single config change.", "checks": ["Auto-scaling pods", "Global CDN distribution", "Edge compute ready"] },
+      { "title": "Zero-Latency APIs", "body": "Sub-10ms response times achieved through intelligent caching, connection pooling, and optimized query planning.", "checks": ["GraphQL & REST", "WebSocket streaming", "Batch processing"] },
+      { "title": "AI-First Design", "body": "Every system we build has ML hooks baked in from day one — not bolted on after the fact.", "checks": ["Model serving layer", "Feature pipelines", "A/B testing engine"] },
+      { "title": "Security by Default", "body": "SOC2-ready infrastructure with end-to-end encryption, role-based access, and automated vulnerability scanning.", "checks": ["Zero-trust networking", "Secrets management", "Audit logging"] }
+    ]
+  },
+  "process": {
+    "badge": "How We Work",
+    "headline": "From Idea to Orbit",
+    "steps": [
+      { "title": "Discovery", "desc": "Deep-dive into your goals, users, and technical constraints." },
+      { "title": "Architecture", "desc": "Design the system blueprint — scalable, maintainable, and battle-tested." },
+      { "title": "Design", "desc": "Craft interfaces that feel inevitable — not just functional." },
+      { "title": "Development", "desc": "Ship working software in 2-week sprints with full transparency." },
+      { "title": "QA & Testing", "desc": "Automated test suites, performance benchmarking, and security audits." },
+      { "title": "Launch & Support", "desc": "Zero-downtime deployments and 24/7 incident response." }
+    ]
+  },
+  "techstack": {
+    "badge": "Our Arsenal",
+    "headline": "Best-in-Class Stack",
+    "subheadline": "We use the tools that serious engineers trust."
+  },
+  "portfolio": {
+    "badge": "Our Work",
+    "headline": "Projects That Scaled",
+    "filters": ["All", "Web App", "Mobile", "API", "Dashboard"],
+    "items": [
+      { "title": "Velocity Commerce", "tag": "Web App", "desc": "E-commerce platform serving 500k daily users" },
+      { "title": "MedPulse Mobile", "tag": "Mobile", "desc": "Healthcare app with real-time vitals streaming" },
+      { "title": "DataBridge API", "tag": "API", "desc": "Unified data layer for 50+ enterprise integrations" },
+      { "title": "NovaDash", "tag": "Dashboard", "desc": "Real-time analytics dashboard processing 2M events/sec" },
+      { "title": "FlowAI", "tag": "Web App", "desc": "ML workflow automation platform for data teams" },
+      { "title": "PulseTrack", "tag": "Mobile", "desc": "IoT fleet management app with GPS tracking" }
+    ]
+  },
+  "caseStudies": {
+    "badge": "Case Studies",
+    "headline": "Proof in the Numbers",
+    "readMore": "Read full case study",
+    "collapse": "Collapse",
+    "items": [
+      {
+        "client": "FinTech Scale-up",
+        "challenge": "Legacy monolith collapsing under 10× growth",
+        "solution": "Migrated to event-driven microservices on Kubernetes with zero downtime",
+        "detail": "We performed a 12-week live migration using the Strangler Fig pattern — routing traffic incrementally while rebuilding each service. Zero user-facing downtime, full data integrity.",
+        "stats": [
+          { "value": "340%", "label": "Throughput increase" },
+          { "value": "8ms", "label": "Avg API latency" },
+          { "value": "$2.1M", "label": "Annual infra savings" }
+        ]
+      },
+      {
+        "client": "Health Tech Startup",
+        "challenge": "Needed HIPAA-compliant infrastructure in 6 weeks",
+        "solution": "Deployed end-to-end encrypted data pipeline with automated compliance reporting",
+        "detail": "Built on AWS with PrivateLink, KMS encryption, CloudTrail audit logs, and automated HIPAA compliance reports. Passed third-party audit on first attempt.",
+        "stats": [
+          { "value": "100%", "label": "HIPAA compliance" },
+          { "value": "6wk", "label": "Delivery timeline" },
+          { "value": "99.99%", "label": "Uptime SLA" }
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "badge": "Client Love",
+    "headline": "What Our Clients Say",
+    "items": [
+      { "quote": "Nexus delivered in 8 weeks what three agencies failed to build in a year. The architecture they designed will serve us for the next decade.", "name": "Sarah Chen", "role": "CTO", "company": "Orbital Systems" },
+      { "quote": "Their API layer handles our peak Black Friday load — 2.3M requests per minute — without breaking a sweat.", "name": "Marcus Webb", "role": "VP Engineering", "company": "Lumino Commerce" },
+      { "quote": "Not just engineers — true partners. They pushed back on our bad ideas and saved us from ourselves twice.", "name": "Priya Nair", "role": "CEO", "company": "Healthspan AI" },
+      { "quote": "The mobile app they built has a 4.9-star rating with 50k reviews. Our users are obsessed.", "name": "Jordan Reeves", "role": "Product Lead", "company": "FitFlow" },
+      { "quote": "They rebuilt our data pipeline from scratch in 6 weeks. Query times dropped from 8 seconds to 40ms.", "name": "Alex Fontaine", "role": "Head of Data", "company": "Meridian Analytics" },
+      { "quote": "Security-first mindset, exceptional code quality, and they actually meet deadlines. Rare combination.", "name": "Dr. Leila Hassan", "role": "Founder", "company": "CipherMed" }
+    ]
+  },
+  "team": {
+    "badge": "The Builders",
+    "headline": "Meet the Team",
+    "subheadline": "We're the engineers behind your success.",
+    "members": [
+      { "name": "Rami Okafor", "role": "CEO & Systems Architect", "bio": "ex-Google SRE. Designed infrastructure serving 500M+ users." },
+      { "name": "Zoe Marchetti", "role": "Head of Engineering", "bio": "Full-stack wizard. Shipped 40+ products from 0 to scale." },
+      { "name": "Tariq Hussain", "role": "AI/ML Lead", "bio": "PhD Computational ML. Builds models that actually ship to prod." },
+      { "name": "Nina Vasquez", "role": "Design Director", "bio": "Product design with depth. 0-to-1 specialist for B2B SaaS." }
+    ]
+  },
+  "stats": {
+    "headline": "The Numbers",
+    "items": [
+      { "value": 120, "suffix": "+", "label": "Projects Delivered" },
+      { "value": 50, "suffix": "+", "label": "Happy Clients" },
+      { "value": 8, "suffix": "", "label": "Years of Experience" },
+      { "value": 99.9, "suffix": "%", "label": "Client Retention" }
+    ]
+  },
+  "pricing": {
+    "badge": "Pricing",
+    "title": "Transparent Pricing",
+    "subtitle": "No surprises. No lock-in. Just great software.",
+    "monthly": "Monthly",
+    "annual": "Annual",
+    "discount": "Save 20%",
+    "mostPopular": "Most Popular",
+    "customPricing": "Custom Pricing",
+    "billedAnnually": "billed annually",
+    "getStarted": "Get Started",
+    "talkToSales": "Talk to Sales",
+    "plans": {
+      "starter": { "name": "Starter", "description": "Perfect for MVPs and early-stage products." },
+      "pro": { "name": "Pro", "description": "For growing teams shipping fast." },
+      "enterprise": { "name": "Enterprise", "description": "Tailored for complex, high-scale systems." }
+    }
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "Frequently Asked",
+    "subtitle": "Everything you need to know before we start building.",
+    "searchPlaceholder": "Search questions...",
+    "noResults": "No matching questions found.",
+    "items": {
+      "timeline": { "q": "How long does a typical project take?", "a": "Most web applications ship in 8–16 weeks depending on scope. Mobile apps typically take 12–20 weeks. We use 2-week sprints so you see working software from week 2." },
+      "techStack": { "q": "What tech stack do you use?", "a": "We're stack-agnostic but specialize in React/Next.js, Node.js, Go, PostgreSQL, AWS/GCP, and Kubernetes. We recommend the right tool for your use case, not the trendiest one." },
+      "pricing": { "q": "Do you do fixed-price or time-and-materials?", "a": "Both. Fixed-price works for well-scoped MVPs. T&M works better for evolving products. We're transparent about trade-offs upfront." },
+      "support": { "q": "Do you provide ongoing support?", "a": "All plans include post-launch support. Enterprise plans include dedicated SRE coverage and defined SLAs. We don't disappear after launch." },
+      "integrations": { "q": "How do you handle integrations with existing systems?", "a": "We specialize in API-first architecture. We've integrated with 200+ third-party systems including Salesforce, SAP, Stripe, Twilio, and custom legacy systems." },
+      "security": { "q": "Is my code and data secure?", "a": "Security is non-negotiable. All projects include HTTPS/TLS, secrets management, dependency scanning, and OWASP compliance checks. Enterprise projects include penetration testing." },
+      "revisions": { "q": "What happens if I'm not happy with the work?", "a": "We offer sprint-by-sprint delivery so you can course-correct early. If output doesn't meet agreed specs, we fix it at no cost. We have a 99.9% client satisfaction rate." },
+      "ownership": { "q": "Who owns the code after the project?", "a": "You do. 100%. All IP is transferred to you upon final payment. We include detailed documentation so your team can maintain and extend the codebase independently." }
+    }
+  },
+  "cta": {
+    "badge": "Get Started",
+    "title": "Ready to Build",
+    "titleHighlight": "the Future?",
+    "subtitle": "Let's architect something extraordinary together. Your next breakthrough starts here.",
+    "primaryCta": "Start Your Project",
+    "secondaryCta": "View Our Work",
+    "trust1": "No lock-in contracts",
+    "trust2": "Response within 4 hours",
+    "trust3": "Free initial consultation"
+  },
+  "contact": {
+    "badge": "Contact Us",
+    "title": "Let's Talk",
+    "subtitle": "Tell us about your project. We respond within 4 hours.",
+    "optional": "optional",
+    "fields": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "company": "Company Name",
+      "service": "Service of Interest",
+      "budget": "Project Budget",
+      "message": "Message"
+    },
+    "placeholders": {
+      "name": "John Smith",
+      "email": "john@company.com",
+      "company": "Acme Corp",
+      "service": "Select a service",
+      "budget": "Select budget range",
+      "message": "Tell us about your project, goals, and timeline..."
+    },
+    "services": {
+      "web": "Web Development",
+      "mobile": "Mobile Apps",
+      "cloud": "Cloud Infrastructure",
+      "ai": "AI Integration",
+      "devops": "DevOps & CI/CD",
+      "other": "Other"
+    },
+    "budgets": {
+      "lt10k": "< $10,000",
+      "10to50k": "$10,000 – $50,000",
+      "50to100k": "$50,000 – $100,000",
+      "gt100k": "$100,000+"
+    },
+    "submit": "Send Message",
+    "sending": "Sending...",
+    "successTitle": "Message Received!",
+    "successMessage": "We'll be in touch within 24 hours. Check your email for confirmation.",
+    "sendAnother": "Send Another",
+    "errors": {
+      "nameRequired": "Name is required (min. 2 characters)",
+      "emailInvalid": "Please enter a valid email address",
+      "messageTooShort": "Message must be at least 20 characters",
+      "serverError": "Something went wrong. Please try again later."
+    },
+    "info": {
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "followUs": "Follow Us",
+      "mapPlaceholder": "Map integration available"
+    }
+  },
+  "footer": {
+    "tagline": "Engineering tomorrow's infrastructure, today.",
+    "nav": {
+      "company": "Company",
+      "services": "Services",
+      "resources": "Resources",
+      "legal": "Legal"
+    },
+    "links": {
+      "about": "About Us",
+      "team": "Our Team",
+      "careers": "Careers",
+      "blog": "Blog",
+      "web": "Web Development",
+      "mobile": "Mobile Apps",
+      "cloud": "Cloud Infrastructure",
+      "ai": "AI Integration",
+      "docs": "Documentation",
+      "changelog": "Changelog",
+      "status": "System Status",
+      "support": "Support Center",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy",
+      "security": "Security"
+    },
+    "newsletter": {
+      "title": "Stay in the loop",
+      "subtitle": "Get the latest on our work and engineering insights.",
+      "placeholder": "your@email.com",
+      "subscribe": "Subscribe",
+      "subscribed": "You're subscribed!"
+    },
+    "copyright": "All rights reserved. Built with",
+    "backToTop": "Back to top"
+  }
+}

@@ -1,0 +1,39 @@
+/* landing-2 design tokens — styling lives in Tailwind utilities on components */
+.landing-2 {
+  --l2-gutter: clamp(1.25rem, 3.6vw, 3.3rem);
+  --l2-white: #f7f8fb;
+  --l2-dark-gradient:
+    radial-gradient(650px 520px at 73% 38%, rgba(5, 52, 123, 0.13), transparent 67%),
+    radial-gradient(450px 360px at 88% 15%, rgba(79, 13, 150, 0.07), transparent 70%),
+    linear-gradient(180deg, #01050c 0%, #00040a 100%);
+  --l2-light-gradient:
+    radial-gradient(520px 330px at 50% 48%, rgba(36, 93, 255, 0.028), transparent 74%),
+    linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+  --l2-btn-gradient: linear-gradient(105deg, #079cff 0%, #236cff 48%, #8129f7 100%);
+}
+
+html:has(.landing-2),
+body:has(.landing-2) {
+  background: #00040a;
+  overflow-x: clip;
+}
+
+.landing-2 ::selection {
+  background: #078cff;
+  color: #fff;
+}
+
+#testimonials.is-scroll-pinned [data-review-card] {
+  opacity: var(--enter, 1);
+  transform: translate3d(0, calc((1 - var(--enter, 1)) * 40px), 0)
+    scale(calc(0.96 + var(--enter, 1) * 0.04));
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #testimonials.is-scroll-pinned [data-review-card] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
