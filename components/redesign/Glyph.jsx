@@ -1,6 +1,6 @@
 /*
- * Glyph — the Ribbon icon set. 24px grid, 1.6 stroke, square caps and
- * mitred joins so icons share the chamfered geometry of the components.
+ * Glyph — the UI icon set. 24px grid, 1.75 stroke, round caps and joins.
+ * Directional icons pass `flip` so they mirror in RTL.
  * Decorative by default (aria-hidden); pass `label` when an icon carries meaning alone.
  */
 
@@ -78,6 +78,15 @@ const PATHS = {
       <path d="M4 3.5v4h4" />
     </>
   ),
+  menu: <path d="M4 7h16M4 12h16M4 17h10" />,
+  close: <path d="M6 6l12 12M18 6L6 18" />,
+  up: <path d="M12 19V5M6 11l6-6 6 6" />,
+  globe: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" />
+    </>
+  ),
   alert: (
     <>
       <path d="M12 3l10 18H2z" />
@@ -94,9 +103,9 @@ export default function Glyph({ name, size = 20, label, flip = false, className 
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="square"
-      strokeLinejoin="miter"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className={className}
       role={label ? 'img' : undefined}
       aria-label={label}

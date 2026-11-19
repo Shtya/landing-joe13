@@ -1,33 +1,53 @@
-import { Tektur, Reem_Kufi, Readex_Pro } from 'next/font/google';
+import { Unbounded, Inter_Tight, Alexandria, Readex_Pro } from 'next/font/google';
 
-// Display (Latin): Tektur — squared, extended letterforms that echo the JOE13 wordmark.
-// Variable on both wght and wdth so headlines can "breathe" under the pointer.
-export const fontDisplay = Tektur({
+/*
+ * JOE13 type system.
+ *   Latin display  — Unbounded: wide, confident geometry for headlines.
+ *   Latin text     — Inter Tight: compact, highly legible body copy.
+ *   Arabic display — Alexandria: modern geometric Arabic that pairs with Unbounded.
+ *   Arabic text    — Readex Pro: one variable file, excellent Arabic legibility.
+ *
+ * Every family is variable (one file per subset), self-hosted by next/font and
+ * served with font-display: swap. Latin files are preloaded (both locales show
+ * Latin: brand, numbers, tech names); the Arabic files load on the Arabic page
+ * only when used, so the English page never downloads them.
+ * redesign.css picks the pair per locale via [dir='rtl'].
+ */
+
+export const fontDisplay = Unbounded({
   subsets: ['latin'],
   weight: 'variable',
-  axes: ['wdth'],
   display: 'swap',
   variable: '--j13-font-display-latin',
+  adjustFontFallback: true,
 });
 
-// Display (Arabic): Reem Kufi — geometric Kufi, the Arabic counterpart of Tektur's grid.
-export const fontDisplayArabic = Reem_Kufi({
-  subsets: ['arabic', 'latin'],
+export const fontText = Inter_Tight({
+  subsets: ['latin'],
   weight: 'variable',
   display: 'swap',
+  variable: '--j13-font-text-latin',
+});
+
+export const fontDisplayArabic = Alexandria({
+  subsets: ['arabic'],
+  weight: 'variable',
+  display: 'swap',
+  preload: false,
   variable: '--j13-font-display-arabic',
 });
 
-// Text (both scripts): Readex Pro — one family for Latin and Arabic body copy.
-export const fontText = Readex_Pro({
-  subsets: ['arabic', 'latin'],
+export const fontTextArabic = Readex_Pro({
+  subsets: ['arabic'],
   weight: 'variable',
   display: 'swap',
-  variable: '--j13-font-text',
+  preload: false,
+  variable: '--j13-font-text-arabic',
 });
 
 export const fontVariables = [
   fontDisplay.variable,
-  fontDisplayArabic.variable,
   fontText.variable,
+  fontDisplayArabic.variable,
+  fontTextArabic.variable,
 ].join(' ');

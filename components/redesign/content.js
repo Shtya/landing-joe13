@@ -1,15 +1,29 @@
 import { getLandingTwoContent } from '@/components/landing-2/content';
 
 /*
- * Copy for the /redesign home. Data (process, projects, testimonials, stats,
- * stack, plans, contact details) is read from the existing content files so
- * both homes stay in sync. The six services, the 3D icon choices and the
- * Mission / Vision / Approach values follow the current home (landing-2).
+ * All copy for the home page, in both locales. This module is the page's i18n
+ * source: components never contain user-facing text; they read it from here.
+ * Shared data (process, projects, testimonials, stats, stack, plans, contact
+ * details) is read from the existing content files so /temp and / stay in sync.
  */
 
 const PLATFORMS = [
-  'amazonaws', 'google', 'microsoft', 'openai', 'vercel', 'cloudflare', 'docker',
-  'github', 'stripe', 'mongodb', 'redis', 'figma', 'shopify', 'slack', 'twilio', 'salesforce',
+  { slug: 'amazonaws', name: 'AWS' },
+  { slug: 'google', name: 'Google Cloud' },
+  { slug: 'microsoft', name: 'Microsoft Azure' },
+  { slug: 'openai', name: 'OpenAI' },
+  { slug: 'vercel', name: 'Vercel' },
+  { slug: 'cloudflare', name: 'Cloudflare' },
+  { slug: 'docker', name: 'Docker' },
+  { slug: 'github', name: 'GitHub' },
+  { slug: 'stripe', name: 'Stripe' },
+  { slug: 'mongodb', name: 'MongoDB' },
+  { slug: 'redis', name: 'Redis' },
+  { slug: 'figma', name: 'Figma' },
+  { slug: 'shopify', name: 'Shopify' },
+  { slug: 'slack', name: 'Slack' },
+  { slug: 'twilio', name: 'Twilio' },
+  { slug: 'salesforce', name: 'Salesforce' },
 ];
 
 // Social profiles — fill in the real URLs; entries without a URL are not rendered as links.
@@ -33,49 +47,77 @@ export function getRedesignContent(locale) {
     dir: ar ? 'rtl' : 'ltr',
     meta: {
       title: t('JOE13 | Bold ideas, engineered to lead', 'JOE13 | أفكار جريئة، مُهندَسة لتقود'),
-      description: base.metaDescription,
+      description: t(
+        'JOE13 designs and engineers digital products — web platforms, mobile apps, cloud and AI — for companies across the Gulf and beyond.',
+        'JOE13 تصمم وتهندس المنتجات الرقمية — منصات ويب وتطبيقات جوال وحلول سحابية وذكاء اصطناعي — لشركات في الخليج وخارجه.',
+      ),
+      ogAlt: t('JOE13 logo', 'شعار JOE13'),
     },
     brand: 'JOE13',
     tagline: t('Empowering your success', 'نُمكّن نجاحك'),
     ui: {
-      skip: t('Skip to current section', 'انتقل إلى القسم الحالي'),
+      skip: t('Skip to content', 'تخطَّ إلى المحتوى'),
       startProject: t('Start a project', 'ابدأ مشروعك'),
       language: ar ? 'English' : 'العربية',
       languageShort: ar ? 'EN' : 'ع',
+      languageLabel: t('Switch language to Arabic', 'تغيير اللغة إلى الإنجليزية'),
       themeToLight: t('Switch to light mode', 'التبديل إلى الوضع الفاتح'),
       themeToDark: t('Switch to dark mode', 'التبديل إلى الوضع الداكن'),
-      railLabel: t('Sections', 'الأقسام'),
+      railLabel: t('Page sections', 'أقسام الصفحة'),
       mainNav: t('Main', 'الرئيسية'),
-      slideOf: (i, n, name) => t(`Section ${i} of ${n}: ${name}`, `القسم ${i} من ${n}: ${name}`),
+      menuOpen: t('Open menu', 'فتح القائمة'),
+      menuClose: t('Close menu', 'إغلاق القائمة'),
+      menu: t('Menu', 'القائمة'),
+      sectionOf: (i, n, name) => t(`Section ${i} of ${n}: ${name}`, `القسم ${i} من ${n}: ${name}`),
       next: t('Next', 'التالي'),
       previous: t('Previous', 'السابق'),
-      scrollHint: t('Scroll, swipe or use the arrow keys', 'مرّر أو اسحب أو استخدم الأسهم'),
+      scroll: t('Scroll to explore', 'مرّر للاستكشاف'),
+      backToTop: t('Back to top', 'العودة للأعلى'),
+      loading: t('Loading', 'جارٍ التحميل'),
     },
-    // tone: 'light' slides echo the white sections of the current home
-    slides: [
-      { id: 'top', name: t('Intro', 'البداية'), tone: 'dark' },
-      { id: 'services', name: t('Services', 'الخدمات'), tone: 'light', nav: true },
-      { id: 'process', name: t('Process', 'آلية العمل'), tone: 'light', nav: true },
-      { id: 'stack', name: t('Stack', 'التقنيات'), tone: 'dark' },
-      { id: 'work', name: t('Work', 'الأعمال'), tone: 'dark', nav: true },
-      { id: 'voices', name: t('Clients', 'العملاء'), tone: 'dark' },
-      { id: 'studio', name: t('About', 'من نحن'), tone: 'dark', nav: true },
-      { id: 'platforms', name: t('Why JOE13', 'لماذا JOE13'), tone: 'dark' },
-      { id: 'plans', name: t('Plans', 'الباقات'), tone: 'light', nav: true },
-      { id: 'contact', name: t('Contact', 'تواصل'), tone: 'dark' },
+    // Order = page order = side indicator order. `nav` puts it in the top bar.
+    // `shape` picks the ribbon form that sits behind the section.
+    sections: [
+      { id: 'top', name: t('Intro', 'البداية'), shape: 'top' },
+      { id: 'impact', name: t('Impact', 'الأثر'), shape: 'platforms' },
+      { id: 'services', name: t('Services', 'الخدمات'), shape: 'services', nav: true },
+      { id: 'process', name: t('Process', 'آلية العمل'), shape: 'process', nav: true },
+      { id: 'work', name: t('Work', 'الأعمال'), shape: 'work', nav: true },
+      { id: 'studio', name: t('About', 'من نحن'), shape: 'studio', nav: true },
+      { id: 'stack', name: t('Stack', 'التقنيات'), shape: 'stack' },
+      { id: 'voices', name: t('Clients', 'العملاء'), shape: 'voices' },
+      { id: 'plans', name: t('Plans', 'الباقات'), shape: 'plans', nav: true },
+      { id: 'contact', name: t('Contact', 'تواصل'), shape: 'contact' },
     ],
+
     hero: {
-      badge: t('We build category-leading digital products', base.hero.badge),
+      badge: t('Software studio · Riyadh', 'استوديو برمجيات · الرياض'),
       lines: ar ? ['أفكار جريئة.', 'مُهندَسة', 'لتقود.'] : ['Bold ideas.', 'Engineered', 'to lead.'],
+      accentLine: 1,
       sub: base.hero.sub,
       primary: t('Start a project', 'ابدأ مشروعك'),
       secondary: t('See the work', 'شاهد الأعمال'),
-      telemetry: [stats[0], stats[1], stats[3], stats[2]].map((s) => ({
-        value: `${s.value}${s.suffix}`,
-        label: s.label,
-      })),
+      proof: [
+        { value: `${stats[0].value}${stats[0].suffix}`, label: stats[0].label },
+        { value: `${stats[3].value}${stats[3].suffix}`, label: stats[3].label },
+        { value: t('24h', '24 ساعة'), label: t('Reply to every brief', 'للرد على كل طلب') },
+      ],
     },
+
+    impact: {
+      eyebrow: t('Impact', 'الأثر'),
+      title: t('Numbers we are proud to sign.', 'أرقام نفخر بالتوقيع عليها.'),
+      lead: t(
+        'Every figure below is a product that shipped, a client who stayed, or an engineer who owns the work.',
+        'كل رقم هنا منتج تم إطلاقه، أو عميل بقي معنا، أو مهندس يمتلك عمله.',
+      ),
+      items: stats.map((s, i) => ({ ...s, icon: ['archive', 'happy-client', 'expert-team', 'measurable-results', 'network-globe', 'users'][i] })),
+      platformsLabel: t('Shipping on the platforms you already trust', 'نُطلق على المنصات التي تثق بها'),
+      logos: PLATFORMS,
+    },
+
     services: {
+      eyebrow: t('What we do', 'ما نقدمه'),
       title: t('Smart solutions for modern businesses', 'حلول ذكية للأعمال الحديثة'),
       lead: t(
         'We help startups and enterprises build digital products that are scalable, secure and ready for what comes next.',
@@ -122,42 +164,37 @@ export function getRedesignContent(locale) {
         },
       ],
     },
+
     process: {
+      eyebrow: t('How we work', 'كيف نعمل'),
       title: t('How a project moves', 'كيف يتحرك المشروع'),
       lead: t(
-        'Fifteen weeks from first call to launch, then we stay. Open a phase to see what happens in it.',
-        'خمسة عشر أسبوعًا من أول مكالمة حتى الإطلاق، ثم نبقى معك. افتح أي مرحلة لترى تفاصيلها.',
+        'Fifteen weeks from first call to launch, then we stay. Scroll through the phases or pick one.',
+        'خمسة عشر أسبوعًا من أول مكالمة حتى الإطلاق، ثم نبقى معك. مرّر عبر المراحل أو اختر إحداها.',
       ),
       icons: ['search', 'web-design', 'code', 'qc', 'rocket', 'support'],
       phases: base.process.phases,
       phaseOf: (i, n) => t(`Phase ${i} of ${n}`, `المرحلة ${i} من ${n}`),
-      next: t('Next', 'التالي'),
-      restart: t('Back to the start', 'العودة للبداية'),
+      pick: t('Process phases', 'مراحل العمل'),
     },
-    stack: {
-      title: ar ? ['امتلك التقنية.', 'وابقَ في السيطرة.'] : ['Own the stack.', 'Stay in control.'],
-      body: base.tech.body,
-      icons: ['web-design', 'code', 'mobile', 'cloud', 'archive', 'cube'],
-      groups: tech,
-      pick: t('Choose a layer', 'اختر طبقة'),
-    },
+
     work: {
-      title: t('Selected work', 'أعمال مختارة'),
+      eyebrow: t('Selected work', 'أعمال مختارة'),
+      title: t('Products in the wild', 'منتجات تعمل في الواقع'),
+      lead: base.projects.subtitle,
       challenge: t('Challenge', 'التحدي'),
       solution: t('What we built', 'ما بنيناه'),
       results: t('Results', 'النتائج'),
       stack: t('Stack', 'التقنيات'),
+      hint: t('Keep scrolling — the work moves sideways', 'استمر في التمرير — الأعمال تتحرك أفقيًا'),
+      hintTouch: t('Swipe to see every project', 'اسحب لرؤية كل المشاريع'),
+      cta: t('Build something like this', 'ابنِ شيئًا مشابهًا'),
+      prefill: (name) => t(`We'd like something like "${name}".`, `نريد شيئًا مثل "${name}".`),
       items: base.projects.items,
     },
-    voices: {
-      title: t('What clients say after launch', 'ماذا يقول العملاء بعد الإطلاق'),
-      items: base.testimonials.items.slice(0, 8),
-      pick: t('Choose a client', 'اختر عميلًا'),
-      rating: t('Rated 5 out of 5', 'التقييم 5 من 5'),
-      pause: t('Pause the rotation', 'إيقاف التنقل التلقائي'),
-      play: t('Resume the rotation', 'استئناف التنقل التلقائي'),
-    },
+
     studio: {
+      eyebrow: t('About JOE13', 'عن JOE13'),
       statement: t(
         'A senior team that scopes it, builds it, and stays for what comes after.',
         'فريق خبير يحدد النطاق، ويبني، ويبقى لما يأتي بعد الإطلاق.',
@@ -171,21 +208,7 @@ export function getRedesignContent(locale) {
         { icon: 'mission', title: t('Vision', 'الرؤية'), body: t('Be the digital partner companies trust with their next product.', 'أن نكون الشريك الرقمي الذي تثق به الشركات في منتجها القادم.') },
         { icon: 'approach', title: t('Approach', 'المنهجية'), body: t('Strategy first, design led, engineered with measurable outcomes.', 'الاستراتيجية أولًا، والتصميم يقود، وهندسة بنتائج قابلة للقياس.') },
       ],
-      stats: [
-        { ...stats[0], icon: 'archive' },
-        { ...stats[1], icon: 'happy-client' },
-        { ...stats[4], icon: 'network-globe' },
-        { ...stats[5], icon: 'expert-team' },
-      ],
-    },
-    platforms: {
-      title: t('Why companies build with JOE13', 'لماذا تبني الشركات مع JOE13'),
-      lead: t(
-        'We ship on the infrastructure and tools that run the products you already use.',
-        'نُطلق منتجاتنا على البنية والأدوات التي تشغّل المنتجات التي تستخدمها يوميًا.',
-      ),
-      ring: t('platforms we ship on', 'منصة نبني عليها'),
-      logos: PLATFORMS,
+      commitTitle: t('Why companies build with us', 'لماذا تبني الشركات معنا'),
       commitments: [
         { icon: 'secure-reliable', title: t('Secure and reliable', 'آمن وموثوق'), body: t('Security reviews and audits are part of every release.', 'مراجعات وتدقيقات الأمان جزء من كل إصدار.') },
         { icon: 'expert-team', title: t('Senior team only', 'فريق خبير فقط'), body: t('The people who scope your project build it.', 'من يحدد نطاق مشروعك هو من يبنيه.') },
@@ -193,7 +216,27 @@ export function getRedesignContent(locale) {
         { icon: 'support', title: t('Support around the clock', 'دعم على مدار الساعة'), body: t('Monitoring and on-call support ship with release one.', 'المراقبة والدعم الفوري يُطلقان مع أول إصدار.') },
       ],
     },
+
+    stack: {
+      eyebrow: t('Technology', 'التقنية'),
+      title: ar ? ['امتلك التقنية.', 'وابقَ في السيطرة.'] : ['Own the stack.', 'Stay in control.'],
+      body: base.tech.body,
+      icons: ['web-design', 'code', 'mobile', 'cloud', 'archive', 'cube'],
+      groups: tech,
+      pick: t('Choose a layer', 'اختر طبقة'),
+    },
+
+    voices: {
+      eyebrow: t('Clients', 'العملاء'),
+      title: t('What clients say after launch', 'ماذا يقول العملاء بعد الإطلاق'),
+      items: base.testimonials.items.slice(0, 12),
+      rating: t('Rated 5 out of 5', 'التقييم 5 من 5'),
+      pause: t('Pause the moving reviews', 'إيقاف حركة المراجعات'),
+      play: t('Play the moving reviews', 'تشغيل حركة المراجعات'),
+    },
+
     plans: {
+      eyebrow: t('Engagement', 'التعاقد'),
       title: t('Ways to work with us', 'طرق العمل معنا'),
       lead: t(
         'Start with a small team and scale up, or bring us a whole platform. Every plan includes code reviews and weekly reports.',
@@ -203,11 +246,15 @@ export function getRedesignContent(locale) {
       month: base.pricing.month,
       choose: t('Choose this plan', 'اختر هذه الباقة'),
       custom: base.pricing.customCta,
+      included: t('What’s included', 'ما تشمله الباقة'),
       icons: ['rocket', 'lightning', 'cube'],
       plans: base.pricing.plans,
       prefill: (name) => t(`I'm interested in the ${name}.`, `أنا مهتم بـ ${name}.`),
     },
+
     contact: {
+      eyebrow: t('Start a project', 'ابدأ مشروعك'),
+      big: ar ? ['لنبنِ', 'الشيء القادم.'] : ["Let's build", 'what’s next.'],
       title: t('Tell us what you are building.', 'أخبرنا بما تبنيه.'),
       lead: t(
         'Send a short brief. A senior engineer replies within 24 hours with questions or a call slot.',
@@ -246,14 +293,25 @@ export function getRedesignContent(locale) {
         { icon: 'verify', label: t('Free first consultation', 'استشارة أولى مجانية') },
       ],
       channels: [
-        { icon: 'archive', label: t('Email', 'البريد'), value: base.footer.email, href: `mailto:${base.footer.email}` },
-        { icon: 'phone-call', label: t('Phone', 'الهاتف'), value: base.footer.phone, href: `tel:${base.footer.phone.replace(/[^\d+]/g, '')}`, ltr: true },
-        { icon: 'location-pin', label: t('Office', 'المكتب'), value: base.footer.address },
+        { icon: 'mail', label: t('Email', 'البريد'), value: base.footer.email, href: `mailto:${base.footer.email}` },
+        { icon: 'phone', label: t('Phone', 'الهاتف'), value: base.footer.phone, href: `tel:${base.footer.phone.replace(/[^\d+]/g, '')}`, ltr: true },
+        { icon: 'pin', label: t('Office', 'المكتب'), value: base.footer.address },
         { icon: 'clock', label: t('Hours', 'ساعات العمل'), value: base.footer.hours[0] },
       ],
-      socials: SOCIALS,
+    },
+
+    footer: {
+      about: t(
+        'A software studio that designs and engineers digital products for ambitious companies.',
+        'استوديو برمجيات يصمم ويهندس المنتجات الرقمية للشركات الطموحة.',
+      ),
+      explore: t('Explore', 'استكشف'),
+      services: t('Services', 'الخدمات'),
+      contact: t('Contact', 'تواصل'),
       follow: t('Follow us', 'تابعنا'),
+      socials: SOCIALS,
       copyright: t('© 2026 JOE13. All rights reserved.', '© 2026 JOE13. جميع الحقوق محفوظة.'),
+      made: t('Designed and engineered in Riyadh.', 'صُمم وهُندس في الرياض.'),
     },
   };
 }

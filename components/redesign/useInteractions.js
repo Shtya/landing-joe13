@@ -5,15 +5,16 @@ import gsap from 'gsap';
 
 /*
  * Pointer layer for the whole page, by event delegation (one listener set):
- *   .j13-btn--prime, .j13-icon-btn, [data-magnetic]  → magnetic pull toward the pointer
+ *   [data-magnetic]                                  → magnetic pull toward the pointer
  *   [data-tilt]                                      → 3D tilt (rotation only, ±deg)
- *   .j13-slab                                        → edge light follows the pointer (--mx/--my)
+ *   .j13-glass, [data-spotlight]                     → spotlight follows the pointer (--mx/--my)
  *   [data-parallax] > img                            → image drifts against the pointer
- *   .j13-btn                                         → chamfered ripple on press
+ *   .j13-btn                                         → soft ripple on press
  * Fine pointers only; nothing runs under reduced motion.
  */
 
-const MAGNET = '.j13-btn--prime, .j13-icon-btn, [data-magnetic]';
+const MAGNET = '[data-magnetic]';
+const SPOT = '.j13-glass, [data-spotlight]';
 
 export function useInteractions(rootRef, enabled = true) {
   useEffect(() => {
@@ -88,7 +89,7 @@ export function useInteractions(rootRef, enabled = true) {
 
         const nMagnet = t.closest(MAGNET);
         const nTilt = t.closest('[data-tilt]');
-        const nSlab = t.closest('.j13-slab');
+        const nSlab = t.closest(SPOT);
         const nParaHost = t.closest('[data-parallax]');
         const nPara = nParaHost?.querySelector('img') ?? null;
 
@@ -116,8 +117,8 @@ export function useInteractions(rootRef, enabled = true) {
         if (magnet) {
           const r = magnet.getBoundingClientRect();
           const m = getMover(magnet, ['x', 'y'], 0.6);
-          m.x((ev.clientX - (r.left + r.width / 2)) * 0.22);
-          m.y((ev.clientY - (r.top + r.height / 2)) * 0.32);
+          m.x((ev.clientX - (r.left + r.width / 2)) * 0.18);
+          m.y((ev.clientY - (r.top + r.height / 2)) * 0.28);
         }
         if (tilt) {
           const r = tilt.getBoundingClientRect();

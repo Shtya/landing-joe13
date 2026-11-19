@@ -74,12 +74,6 @@ export default async function LocaleLayout({ children, params: { locale } }) {
   return (
     <html lang={locale} dir={isRTL ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -88,11 +82,14 @@ export default async function LocaleLayout({ children, params: { locale } }) {
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                const stored = localStorage.getItem('theme');
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (stored === 'dark' || (!stored && prefersDark)) {
-                  document.documentElement.classList.add('dark');
-                }
+                var root = document.documentElement;
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var stored = localStorage.getItem('theme');
+                if (stored === 'dark' || (!stored && prefersDark)) root.classList.add('dark');
+                // Home page theme: saved choice, else the system preference. Set before
+                // first paint so the page never flashes the wrong theme.
+                var j13 = localStorage.getItem('j13-theme');
+                root.setAttribute('data-theme', j13 === 'light' || j13 === 'dark' ? j13 : (prefersDark ? 'dark' : 'light'));
               } catch(e) {}
             `,
           }}

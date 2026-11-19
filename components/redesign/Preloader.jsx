@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+import Logo from './ui/Logo';
 import gsap from 'gsap';
 
 /*
- * Boot screen — once per browser session. It waits for what the first scene
- * actually needs (fonts and the ribbon), shows real progress, then lifts away
- * on a chamfered shutter. Click or Escape skips it. Reduced motion: skipped.
+ * Page-load intro — once per browser session. It waits for what the first
+ * screen needs (fonts and the ribbon), shows real progress, then lifts away as
+ * a curtain. Click or Escape skips it. Reduced motion: skipped.
  */
 export default function Preloader({ ready, onDone, label }) {
   const rootRef = useRef(null);
@@ -32,7 +32,7 @@ export default function Preloader({ ready, onDone, label }) {
       .timeline({ onComplete: () => setShow(false) })
       .to(el.querySelectorAll('[data-boot]'), { opacity: 0, y: -16, duration: 0.35, stagger: 0.04, ease: 'power2.in' })
       .call(onDone)
-      .to(el, { clipPath: 'polygon(0 0, 100% 0, 100% 0%, 0 0%)', duration: 0.9, ease: 'power4.inOut' }, '-=0.05');
+      .to(el, { yPercent: -100, duration: 0.9, ease: 'power4.inOut' }, '-=0.05');
   };
 
   // Skip entirely when it already ran this session or motion is reduced.
@@ -87,7 +87,7 @@ export default function Preloader({ ready, onDone, label }) {
   return (
     <div ref={rootRef} className="j13-boot" role="status" aria-live="polite" aria-label={label} onClick={finish}>
       <div className="j13-boot__mark" data-boot>
-        <Image src="/logos/logo-white.png" alt="JOE13" width={260} height={88} sizes="260px" priority />
+        <Logo priority />
       </div>
       <div className="j13-boot__meter" data-boot>
         <span className="j13-boot__bar">

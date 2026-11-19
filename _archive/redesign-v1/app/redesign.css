@@ -1,0 +1,2990 @@
+/* ==========================================================================
+   JOE13 "Ribbon" design system — master reference
+   Tokens → primitives → components → slides. Read DESIGN_SYSTEM.md first.
+   Every value a component needs comes from a token below; components never
+   hard-code a colour, a font, a radius or a duration.
+   ========================================================================== */
+
+/* ---------- 1. Tokens ---------------------------------------------------- */
+
+.j13 {
+  /* Brand primitives (from the JOE13 mark: cobalt ribbon, cyan highlight, chrome letters) */
+  --j13-abyss: #020611;
+  --j13-deep: #06102a;
+  --j13-trench: #0b1a3f;
+  --j13-cobalt: #1456ff;
+  --j13-cobalt-hi: #3d7bff;
+  --j13-cyan: #2ec5ff;
+  --j13-violet: #7a4dff;
+  --j13-chrome: #eef3ff;
+  --j13-mist: #9aaad0;
+  --j13-slate: #6b7aa3;
+  --j13-paper: #edf1f9;
+  --j13-ink: #040a1f;
+  --j13-danger: #ff5d7a;
+  --j13-success: #38e0b0;
+
+  /* Type */
+  --font-display: var(--j13-font-display-latin), 'Arial Narrow', system-ui, sans-serif;
+  --font-text: var(--j13-font-text), system-ui, sans-serif;
+  --fs-hero: clamp(3rem, 8.2vw, 9.25rem);
+  --fs-h1: clamp(2.5rem, 5.6vw, 6rem);
+  --fs-h2: clamp(2rem, 4vw, 4.25rem);
+  --fs-h3: clamp(1.25rem, 1.7vw, 1.75rem);
+  --fs-lead: clamp(1.0625rem, 1.15vw, 1.25rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-micro: 0.75rem;
+  --lh-display: 0.92;
+  --lh-body: 1.6;
+  --tracking-display: -0.015em;
+
+  /* Space (4px base) */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --gutter: clamp(20px, 4vw, 64px);
+  --nav-h: 76px;
+  --rail-w: 72px;
+
+  /* Shape — the chamfer echoes the cut ends of the JOE13 ribbon */
+  --cut-s: 8px;
+  --cut: 14px;
+  --cut-l: 24px;
+  --radius-pill: 999px;
+  --hair: 1px;
+
+  /* Elevation — light, not grey shadows */
+  --shadow-lift: 0 40px 80px -40px rgba(0, 4, 24, 0.9);
+  --glow-accent: 0 12px 40px -12px rgba(20, 86, 255, 0.75);
+  --glow-focus: 0 0 0 2px var(--bg), 0 0 0 4px var(--focus);
+
+  /* Motion — keep in sync with components/redesign/motion.js */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-fast: 160ms;
+  --t-base: 320ms;
+  --t-slow: 700ms;
+  --t-scene: 1100ms;
+
+  --z-canvas: 0;
+  --z-slides: 10;
+  --z-chrome: 40;
+}
+
+/* Semantic colour. Dark is native; any element with data-theme re-scopes
+   these, which is how a light section can sit inside a dark page. */
+.j13,
+.j13 [data-theme='dark'] {
+  --bg: var(--j13-abyss);
+  --bg-raise: var(--j13-deep);
+  --surface: rgba(10, 22, 56, 0.56);
+  --surface-strong: rgba(12, 26, 66, 0.86);
+  --line: rgba(130, 160, 230, 0.16);
+  --line-strong: rgba(150, 180, 255, 0.34);
+  --text: var(--j13-chrome);
+  --text-2: var(--j13-mist);
+  --text-3: rgba(154, 170, 208, 0.5);
+  --accent: var(--j13-cobalt-hi);
+  --accent-2: var(--j13-cyan);
+  --accent-ink: #ffffff;
+  --focus: var(--j13-cyan);
+  --danger: var(--j13-danger);
+  --success: var(--j13-success);
+  --chrome-text: linear-gradient(176deg, #ffffff 0%, #e4ecff 46%, #a9bce6 54%, #f4f7ff 100%);
+  --cobalt-body: linear-gradient(100deg, #0f47ff 0%, #1f6dff 52%, #26a9ff 100%);
+  --slab-edge: linear-gradient(150deg, rgba(120, 170, 255, 0.55), rgba(70, 100, 200, 0.12) 38%, rgba(70, 100, 200, 0.08) 62%, rgba(46, 197, 255, 0.45));
+  --logo-filter: none;
+
+  color: var(--text);
+}
+
+.j13[dir='rtl'] {
+  --font-display: var(--j13-font-display-arabic), var(--j13-font-text), system-ui, sans-serif;
+  --lh-display: 1.18;
+  --tracking-display: 0;
+  --fs-hero: clamp(2.75rem, 7vw, 8rem);
+}
+
+.j13[data-theme='light'],
+.j13 [data-theme='light'] {
+  --bg: var(--j13-paper);
+  --bg-raise: #ffffff;
+  --surface: rgba(255, 255, 255, 0.62);
+  --surface-strong: rgba(255, 255, 255, 0.92);
+  --line: rgba(20, 40, 100, 0.14);
+  --line-strong: rgba(20, 50, 140, 0.3);
+  --text: var(--j13-ink);
+  --text-2: #3a4870;
+  --text-3: rgba(58, 72, 112, 0.55);
+  --accent: #0b47e6;
+  --accent-2: #0077b8;
+  --focus: #0b47e6;
+  --chrome-text: linear-gradient(176deg, #040a1f 0%, #142659 50%, #040a1f 100%);
+  --slab-edge: linear-gradient(150deg, rgba(20, 86, 255, 0.4), rgba(20, 40, 100, 0.1) 40%, rgba(20, 40, 100, 0.08) 60%, rgba(0, 140, 210, 0.36));
+  --shadow-lift: 0 40px 80px -48px rgba(10, 30, 90, 0.45);
+  --glow-accent: 0 12px 32px -14px rgba(11, 71, 230, 0.6);
+  color: var(--text);
+}
+
+/* ---------- 2. Base ------------------------------------------------------ */
+
+html:has(.j13),
+body:has(.j13) {
+  background: #020611;
+}
+html:has(.j13[data-theme='light']),
+body:has(.j13[data-theme='light']) {
+  background: var(--j13-paper);
+}
+html:has(.j13[data-mode='deck']),
+body:has(.j13[data-mode='deck']) {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.j13 {
+  position: relative;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-text);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 900ms var(--ease-in-out);
+}
+.j13 *,
+.j13 *::before,
+.j13 *::after {
+  box-sizing: border-box;
+}
+.j13 ::selection {
+  background: var(--j13-cobalt);
+  color: #fff;
+}
+.j13 :focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+:where(.j13) button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+:where(.j13) a {
+  color: inherit;
+}
+:where(.j13) :is(h1, h2, h3, p, ul, ol, dl, dd, figure, blockquote) {
+  margin: 0;
+  padding: 0;
+}
+:where(.j13) :is(ul, ol) {
+  list-style: none;
+}
+.j13-sr {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.j13-skip {
+  position: fixed;
+  top: var(--s-3);
+  inset-inline-start: var(--s-3);
+  z-index: 100;
+  padding: var(--s-3) var(--s-4);
+  background: var(--surface-strong);
+  color: var(--text);
+  transform: translateY(-160%);
+  transition: transform var(--t-base) var(--ease-out);
+}
+.j13-skip:focus {
+  transform: none;
+}
+
+/* ---------- 3. Primitives ----------------------------------------------- */
+
+/* Chamfer: top-start and bottom-end corners are cut, like the ribbon's ends */
+.j13-cut {
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+
+.j13-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+  font-variation-settings: 'wdth' 100;
+}
+.j13-chrome {
+  background: var(--chrome-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.j13-h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+.j13-h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  line-height: 1.15;
+}
+.j13-lead {
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+.j13-small {
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+.j13-num {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.j13[dir='rtl'] .j13-num {
+  font-family: var(--j13-font-display-latin), sans-serif;
+}
+
+/* Split-text helpers (motion.js) */
+.j13-line {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.06em;
+  margin-block: -0.06em;
+}
+.j13-line > span {
+  display: inline-block;
+  will-change: transform;
+}
+.j13-char {
+  display: inline-block;
+  font-variation-settings: 'wght' var(--w, 700), 'wdth' var(--wd, 100);
+}
+
+/* ---------- 4. Components ----------------------------------------------- */
+
+/* Button */
+.j13-btn {
+  --cut: 12px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-3);
+  min-height: 52px;
+  padding: 0 var(--s-5);
+  font-family: var(--font-text);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  isolation: isolate;
+  transition: transform var(--t-fast) var(--ease-out), filter var(--t-base) var(--ease-out);
+}
+.j13-btn:active {
+  transform: translateY(1px) scale(0.985);
+}
+.j13-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.j13-btn svg {
+  flex: none;
+  transition: transform var(--t-base) var(--ease-out);
+}
+.j13-btn:hover svg {
+  transform: translateX(3px);
+}
+.j13[dir='rtl'] .j13-btn svg[data-flip] {
+  transform: scaleX(-1);
+}
+.j13[dir='rtl'] .j13-btn:hover svg[data-flip] {
+  transform: scaleX(-1) translateX(3px);
+}
+
+.j13-btn--prime {
+  color: var(--accent-ink);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  background: var(--cobalt-body);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -10px 20px rgba(0, 10, 80, 0.25);
+  filter: drop-shadow(0 10px 22px rgba(20, 86, 255, 0.45));
+}
+/* light streak that crosses the button on hover — the ribbon's sheen */
+.j13-btn--prime::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.55) 48%, transparent 62%);
+  transform: translateX(-120%);
+  transition: transform 0s;
+}
+.j13-btn--prime:hover::after {
+  transform: translateX(120%);
+  transition: transform 900ms var(--ease-out);
+}
+.j13-btn--prime:hover {
+  filter: drop-shadow(0 14px 30px rgba(20, 86, 255, 0.6)) brightness(1.06);
+}
+
+.j13-btn--ghost {
+  color: var(--text);
+  background: var(--slab-edge);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+.j13-btn--ghost::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  background: var(--bg);
+  clip-path: polygon(calc(var(--cut) - 0.5px) 0, 100% 0, 100% calc(100% - var(--cut) + 0.5px), calc(100% - var(--cut) + 0.5px) 100%, 0 100%, 0 calc(var(--cut) - 0.5px));
+  transition: background-color var(--t-base) var(--ease-out);
+}
+.j13-btn--ghost:hover::before {
+  background: var(--bg-raise);
+}
+.j13-btn--sm {
+  --cut: 9px;
+  min-height: 42px;
+  padding: 0 var(--s-4);
+  font-size: var(--fs-small);
+}
+.j13-btn:focus-visible {
+  outline: none;
+  filter: drop-shadow(0 0 0 var(--focus)) drop-shadow(0 0 2px var(--focus)) drop-shadow(0 0 1px var(--focus));
+}
+
+/* Icon button (square, chamfered) */
+.j13-icon-btn {
+  --cut: 9px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--text);
+  background: var(--slab-edge);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  isolation: isolate;
+  transition: color var(--t-fast) var(--ease-out);
+}
+.j13-icon-btn::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  background: var(--surface-strong);
+  clip-path: inherit;
+}
+.j13-icon-btn:hover {
+  color: var(--accent-2);
+}
+.j13-icon-btn:focus-visible {
+  outline: none;
+  background: var(--focus);
+}
+.j13-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Slab — the one surface. Glass with a lit, chamfered edge. */
+.j13-slab {
+  --cut: var(--cut-l);
+  position: relative;
+  isolation: isolate;
+  background: var(--slab-edge);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  box-shadow: var(--shadow-lift);
+}
+.j13-slab::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  background:
+    radial-gradient(120% 80% at 0% 0%, rgba(61, 123, 255, 0.12), transparent 60%),
+    var(--surface-strong);
+  clip-path: polygon(calc(var(--cut) - 0.4px) 0, 100% 0, 100% calc(100% - var(--cut) + 0.4px), calc(100% - var(--cut) + 0.4px) 100%, 0 100%, 0 calc(var(--cut) - 0.4px));
+}
+@supports (backdrop-filter: blur(1px)) {
+  .j13-slab::before {
+    background:
+      radial-gradient(120% 80% at 0% 0%, rgba(61, 123, 255, 0.12), transparent 60%),
+      var(--surface);
+    backdrop-filter: blur(22px) saturate(140%);
+  }
+}
+
+/* Chip — tags for stacks and metadata */
+.j13-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 var(--s-3);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  color: var(--text-2);
+  border: var(--hair) solid var(--line);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+/* Glyph tile — icon holder with a lit bevel */
+.j13-glyph {
+  --cut: 10px;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex: none;
+  color: var(--accent-2);
+  background:
+    linear-gradient(160deg, rgba(61, 123, 255, 0.28), rgba(20, 86, 255, 0.04)),
+    var(--surface);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* Metric */
+.j13-metric {
+  display: grid;
+  gap: var(--s-1);
+}
+.j13-metric__value {
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-size: clamp(2rem, 3.6vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: 'wdth' 80;
+}
+.j13-metric__label {
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+
+/* Form */
+.j13-form {
+  display: grid;
+  gap: var(--s-4);
+}
+.j13-field {
+  display: grid;
+  gap: var(--s-2);
+}
+.j13-label {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--text-2);
+}
+.j13-input {
+  width: 100%;
+  min-height: 48px;
+  padding: var(--s-3) var(--s-4);
+  font: inherit;
+  font-size: var(--fs-body);
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-bottom: var(--hair) solid var(--line-strong);
+  border-radius: 0;
+  transition: border-color var(--t-base) var(--ease-out), background-color var(--t-base) var(--ease-out);
+}
+.j13-input::placeholder {
+  color: var(--text-3);
+}
+.j13-input:hover {
+  background: rgba(61, 123, 255, 0.05);
+}
+.j13 .j13-input:focus-visible {
+  outline: none;
+  border-bottom-color: var(--focus);
+  background: rgba(46, 197, 255, 0.07);
+  box-shadow: 0 1px 0 0 var(--focus);
+}
+.j13-input[aria-invalid='true'] {
+  border-bottom-color: var(--danger);
+}
+textarea.j13-input {
+  min-height: 96px;
+  resize: vertical;
+  line-height: 1.5;
+}
+.j13-hint {
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+.j13-error {
+  display: flex;
+  gap: var(--s-2);
+  align-items: center;
+  font-size: var(--fs-small);
+  color: var(--danger);
+}
+.j13-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.j13-choice {
+  position: relative;
+}
+.j13-choice input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.j13-choice span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 var(--s-4);
+  font-size: var(--fs-small);
+  color: var(--text-2);
+  border: var(--hair) solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  transition: color var(--t-fast), background-color var(--t-fast), border-color var(--t-fast);
+}
+.j13-choice input:hover + span {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.j13-choice input:checked + span {
+  color: #fff;
+  background: var(--j13-cobalt);
+  border-color: var(--j13-cobalt);
+}
+.j13-choice input:focus-visible + span {
+  box-shadow: var(--glow-focus);
+}
+
+/* ---------- 5. Chrome: nav + rail -------------------------------------- */
+
+.j13-nav {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: var(--z-chrome);
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding-inline: var(--gutter);
+  pointer-events: none;
+}
+.j13-nav > * {
+  pointer-events: auto;
+}
+.j13-nav__brand {
+  display: block;
+  width: clamp(112px, 11vw, 150px);
+}
+.j13-nav__brand img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: var(--logo-filter);
+}
+.j13-nav__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+.j13-lang {
+  font-family: var(--font-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Vertical bullet rail — fixed on the right in both directions */
+.j13-rail {
+  position: fixed;
+  right: clamp(10px, 1.6vw, 28px);
+  top: 50%;
+  z-index: var(--z-chrome);
+  transform: translateY(-50%);
+  display: grid;
+  justify-items: center;
+  gap: var(--s-3);
+  direction: ltr;
+}
+.j13-rail__count {
+  display: grid;
+  justify-items: center;
+  line-height: 1;
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.j13-rail__count b {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.j13-rail__count span {
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+  margin-top: 2px;
+}
+.j13-rail__list {
+  position: relative;
+  display: grid;
+}
+/* the track */
+.j13-rail__list::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  bottom: 18px;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--line-strong) 12%, var(--line-strong) 88%, transparent);
+}
+/* the travelling light pip */
+.j13-rail__pip {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 4px;
+  height: 26px;
+  margin-left: -2px;
+  margin-top: 5px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--accent-2), var(--j13-cobalt));
+  box-shadow: 0 0 12px 2px rgba(46, 197, 255, 0.55), 0 0 28px 4px rgba(20, 86, 255, 0.35);
+  transform: translateY(calc(var(--rail-i, 0) * 36px));
+  transition: transform 700ms var(--ease-spring);
+  pointer-events: none;
+}
+.j13-rail__btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+}
+.j13-rail__mark {
+  width: 7px;
+  height: 7px;
+  background: var(--text-3);
+  transform: rotate(45deg);
+  transition: transform var(--t-base) var(--ease-out), background-color var(--t-base) var(--ease-out), opacity var(--t-base);
+}
+.j13-rail__btn:hover .j13-rail__mark {
+  background: var(--text);
+  transform: rotate(45deg) scale(1.35);
+}
+.j13-rail__btn[aria-current='true'] .j13-rail__mark {
+  opacity: 0;
+  transform: rotate(45deg) scale(0.4);
+}
+.j13-rail__label {
+  position: absolute;
+  right: calc(100% + 6px);
+  top: 50%;
+  padding: 6px 12px;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--text);
+  background: var(--surface-strong);
+  border: var(--hair) solid var(--line);
+  border-radius: 2px;
+  opacity: 0;
+  transform: translate(8px, -50%);
+  pointer-events: none;
+  transition: opacity var(--t-fast) var(--ease-out), transform var(--t-base) var(--ease-out);
+}
+.j13[dir='rtl'] .j13-rail__label {
+  direction: rtl;
+}
+.j13-rail__btn:hover .j13-rail__label,
+.j13-rail__btn:focus-visible .j13-rail__label {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+.j13-rail__btn:focus-visible {
+  outline-offset: -4px;
+}
+.j13-rail__hint {
+  writing-mode: vertical-rl;
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+  margin-top: var(--s-2);
+  letter-spacing: 0.04em;
+}
+.j13[dir='rtl'] .j13-rail__hint {
+  direction: rtl;
+}
+
+/* ---------- 6. Stage: canvas + deck ------------------------------------- */
+
+.j13-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+}
+.j13-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0;
+  transition: opacity 1200ms var(--ease-out);
+}
+.j13-canvas.is-ready canvas {
+  opacity: 1;
+}
+/* film grain + scanline vignette sitting above the ribbon, below content */
+.j13-canvas::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(130% 90% at 50% 50%, transparent 55%, rgba(0, 2, 10, 0.55) 100%);
+  pointer-events: none;
+}
+.j13[data-theme='light'] .j13-canvas::after {
+  background: radial-gradient(130% 90% at 50% 50%, transparent 60%, rgba(160, 175, 210, 0.35) 100%);
+}
+
+.j13-deck {
+  position: relative;
+  z-index: var(--z-slides);
+}
+.j13[data-mode='deck'] .j13-deck {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.j13-slide {
+  position: relative;
+  min-height: 100svh;
+  padding: calc(var(--nav-h) + var(--s-6)) calc(var(--rail-w) + var(--gutter)) var(--s-8) var(--gutter);
+  display: grid;
+  align-content: center;
+}
+.j13[data-mode='deck'] .j13-slide {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  height: 100%;
+  visibility: hidden;
+}
+.j13[data-mode='deck'] .j13-slide.is-active,
+.j13[data-mode='deck'] .j13-slide.is-leaving {
+  visibility: visible;
+}
+.j13-slide__inner {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+/* the scan line that sweeps during a slide change */
+.j13-scan {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  z-index: calc(var(--z-slides) + 1);
+  background: linear-gradient(90deg, transparent, var(--accent-2) 20%, #fff 50%, var(--accent-2) 80%, transparent);
+  box-shadow: 0 0 24px 4px rgba(46, 197, 255, 0.5);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- 7. Slides --------------------------------------------------- */
+
+/* 0 · Hero */
+.j13-hero {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: calc(100svh - var(--nav-h) - var(--s-6) - var(--s-8));
+  gap: var(--s-7);
+}
+.j13-hero__copy {
+  align-self: center;
+  display: grid;
+  gap: var(--s-6);
+  max-width: min(900px, 62vw);
+}
+.j13-hero__title {
+  font-size: var(--fs-hero);
+  font-weight: 800;
+}
+.j13-hero__title .j13-line:nth-child(2) {
+  padding-inline-start: 0.9em;
+}
+.j13[dir='rtl'] .j13-hero__title .j13-line:nth-child(2) {
+  padding-inline-start: 0.6em;
+}
+.j13-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+.j13-telemetry {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: var(--hair) solid var(--line);
+}
+.j13-telemetry > div {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-4) 0 0;
+}
+.j13-telemetry > div + div {
+  padding-inline-start: var(--s-4);
+  border-inline-start: var(--hair) solid var(--line);
+}
+.j13-telemetry b {
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-size: 1.375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.j13-telemetry span {
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+
+/* 1 · Services */
+.j13-services {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(32px, 5vw, 96px);
+  align-items: center;
+}
+.j13-services__head {
+  display: grid;
+  gap: var(--s-4);
+  margin-bottom: var(--s-6);
+}
+.j13-index {
+  display: grid;
+  border-top: var(--hair) solid var(--line);
+}
+.j13-index__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  width: 100%;
+  padding: clamp(10px, 1.4vh, 18px) 0;
+  text-align: start;
+  border-bottom: var(--hair) solid var(--line);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.2vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--text-3);
+  transition: color var(--t-base) var(--ease-out), padding var(--t-slow) var(--ease-out);
+}
+.j13-index__item::before {
+  content: '';
+  width: 0;
+  height: 3px;
+  flex: none;
+  background: linear-gradient(90deg, var(--j13-cobalt), var(--accent-2));
+  box-shadow: 0 0 14px rgba(46, 197, 255, 0.6);
+  transition: width var(--t-slow) var(--ease-out);
+}
+.j13-index__item:hover {
+  color: var(--text-2);
+}
+.j13-index__item[aria-selected='true'] {
+  color: var(--text);
+}
+.j13-index__item[aria-selected='true']::before {
+  width: clamp(24px, 3vw, 48px);
+}
+.j13-index__item:focus-visible {
+  outline-offset: -2px;
+}
+.j13-lens {
+  padding: clamp(24px, 3vw, 44px);
+  display: grid;
+  gap: var(--s-5);
+  min-height: 380px;
+  align-content: start;
+}
+.j13-lens__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+}
+.j13-lens__count {
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-size: var(--fs-small);
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+.j13-lens__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+/* 2 · Platforms */
+.j13-platforms {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 96px);
+  align-items: center;
+}
+.j13-platforms__copy {
+  display: grid;
+  gap: var(--s-5);
+}
+.j13-commit {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-5) var(--s-6);
+  margin-top: var(--s-3);
+}
+.j13-commit li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--s-1) var(--s-4);
+  align-items: start;
+}
+.j13-commit .j13-glyph {
+  grid-row: span 2;
+}
+.j13-commit h3 {
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+.j13-commit p {
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+.j13-orbit {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 1;
+  width: min(100%, 560px);
+  justify-self: center;
+  perspective: 1200px;
+}
+.j13-orbit__core {
+  position: absolute;
+  inset: 34%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.j13-orbit__core b {
+  display: block;
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-size: clamp(2.5rem, 4.5vw, 4rem);
+  line-height: 1;
+}
+.j13-orbit__core span {
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+@property --spin {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+.j13-orbit__ring {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(68deg);
+  animation: j13-orbit 70s linear infinite;
+  animation-play-state: paused;
+}
+.j13-slide.is-active .j13-orbit__ring,
+.j13[data-mode='flow'] .j13-orbit__ring {
+  animation-play-state: running;
+}
+.j13-orbit__ring::before {
+  content: '';
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 0 60px -10px rgba(20, 86, 255, 0.5), inset 0 0 60px -20px rgba(46, 197, 255, 0.35);
+}
+.j13-orbit__logo {
+  --r: 44cqi;
+  --ang: calc(var(--a) + var(--spin));
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 54px;
+  height: 54px;
+  margin: -27px;
+  transform: rotateZ(var(--ang)) translateY(calc(var(--r) * -1)) rotateZ(calc(var(--ang) * -1)) rotateX(-68deg);
+}
+.j13-orbit__logo i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--text-2);
+  -webkit-mask: var(--src) center / 56% no-repeat;
+  mask: var(--src) center / 56% no-repeat;
+}
+@keyframes j13-orbit {
+  to {
+    --spin: 360deg;
+  }
+}
+
+/* 3 · Process */
+.j13-process {
+  display: grid;
+  gap: clamp(28px, 4vh, 56px);
+}
+.j13-process__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+  gap: var(--s-6);
+  align-items: end;
+}
+.j13-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.j13-track::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 22px;
+  height: 1px;
+  background: var(--line-strong);
+}
+.j13-track__fill {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 21px;
+  height: 3px;
+  width: calc((var(--p, 0) + 0.5) / 6 * 100%);
+  background: linear-gradient(90deg, var(--j13-cobalt), var(--accent-2));
+  box-shadow: 0 0 16px rgba(46, 197, 255, 0.6);
+  transition: width var(--t-slow) var(--ease-out);
+}
+.j13[dir='rtl'] .j13-track__fill {
+  background: linear-gradient(270deg, var(--j13-cobalt), var(--accent-2));
+}
+.j13-step {
+  position: relative;
+  display: grid;
+  justify-items: start;
+  gap: var(--s-3);
+  padding-inline-end: var(--s-4);
+  text-align: start;
+}
+.j13-step__node {
+  --cut: 7px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--text-2);
+  background: var(--bg-raise);
+  border: 1px solid var(--line-strong);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  transition: color var(--t-base), background-color var(--t-base), transform var(--t-base) var(--ease-spring);
+}
+.j13-step:hover .j13-step__node {
+  color: var(--text);
+  transform: translateY(-2px);
+}
+.j13-step[aria-selected='true'] .j13-step__node {
+  color: #fff;
+  background: var(--cobalt-body);
+  border-color: transparent;
+}
+.j13-step__title {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-2);
+  transition: color var(--t-base);
+}
+.j13-step[aria-selected='true'] .j13-step__title {
+  color: var(--text);
+}
+.j13-step__time {
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+.j13-phase {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--s-6);
+  padding: clamp(22px, 2.6vw, 36px);
+  align-items: start;
+}
+.j13-phase__points {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-3) var(--s-5);
+}
+.j13-phase__points li {
+  display: flex;
+  gap: var(--s-3);
+  align-items: baseline;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+.j13-phase__points li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  flex: none;
+  transform: translateY(-1px) rotate(45deg);
+  background: var(--accent-2);
+}
+
+/* 4 · Studio */
+.j13-studio {
+  display: grid;
+  gap: clamp(32px, 6vh, 72px);
+}
+.j13-studio__statement {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.6vw, 5rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: var(--tracking-display);
+  max-width: 18ch;
+  text-wrap: balance;
+}
+.j13[dir='rtl'] .j13-studio__statement {
+  line-height: 1.3;
+  max-width: 20ch;
+}
+.j13-studio__row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(28px, 5vw, 96px);
+  align-items: end;
+}
+.j13-studio__metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s-5);
+}
+.j13-studio__metrics .j13-metric {
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line-strong);
+}
+.j13-studio__metrics .j13-metric:first-child {
+  border-top-color: var(--accent-2);
+}
+
+/* 5 · Work */
+.j13-work {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.62fr) minmax(0, 1.38fr);
+  gap: clamp(24px, 4vw, 72px);
+  align-items: center;
+}
+.j13-work__list {
+  display: grid;
+  gap: 2px;
+  margin-top: var(--s-5);
+}
+.j13-work__pick {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 var(--s-3);
+  padding: var(--s-3) var(--s-3);
+  text-align: start;
+  border-inline-start: 2px solid transparent;
+  transition: background-color var(--t-base), border-color var(--t-base);
+}
+.j13-work__pick b {
+  font-weight: 500;
+  color: var(--text-2);
+  transition: color var(--t-base);
+}
+.j13-work__pick span {
+  grid-column: 2;
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+.j13-work__pick i {
+  font-style: normal;
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+  padding-top: 4px;
+}
+.j13-work__pick:hover b {
+  color: var(--text);
+}
+.j13-work__pick[aria-selected='true'] {
+  border-color: var(--accent-2);
+  background: linear-gradient(90deg, rgba(20, 86, 255, 0.16), transparent);
+}
+.j13[dir='rtl'] .j13-work__pick[aria-selected='true'] {
+  background: linear-gradient(270deg, rgba(20, 86, 255, 0.16), transparent);
+}
+.j13-work__pick[aria-selected='true'] b {
+  color: var(--text);
+}
+.j13-case {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 0;
+  min-height: min(560px, 62vh);
+}
+.j13-case__media {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-raise);
+}
+.j13-case__media img {
+  object-fit: cover;
+  filter: saturate(0.85) contrast(1.05);
+}
+.j13-case__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(200deg, rgba(20, 86, 255, 0.0) 40%, rgba(2, 6, 17, 0.75) 100%), linear-gradient(0deg, rgba(20, 86, 255, 0.18), rgba(20, 86, 255, 0.18));
+  mix-blend-mode: normal;
+}
+.j13-case__media figcaption {
+  position: absolute;
+  inset-inline: var(--s-5);
+  bottom: var(--s-5);
+  z-index: 1;
+  color: #fff;
+}
+.j13-case__body {
+  display: grid;
+  align-content: space-between;
+  gap: var(--s-5);
+  padding: clamp(20px, 2.4vw, 36px);
+}
+.j13-case__results {
+  display: grid;
+  gap: var(--s-3);
+}
+.j13-case__results li {
+  display: flex;
+  gap: var(--s-3);
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  font-weight: 600;
+}
+.j13-case__results li::before {
+  content: '';
+  width: 14px;
+  height: 2px;
+  flex: none;
+  transform: translateY(-5px);
+  background: var(--accent-2);
+}
+.j13-case__label {
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  color: var(--accent-2);
+  margin-bottom: var(--s-1);
+}
+.j13-case__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+.j13-case__nav output {
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+  min-width: 4ch;
+  text-align: center;
+}
+
+/* 6 · Voices */
+.j13-voices {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.42fr);
+  gap: clamp(28px, 5vw, 96px);
+  align-items: center;
+}
+.j13-quote {
+  position: relative;
+  display: grid;
+  gap: var(--s-6);
+}
+.j13-quote__mark {
+  width: clamp(56px, 6vw, 88px);
+  height: auto;
+  color: var(--accent-2);
+}
+.j13-quote blockquote p {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 3rem);
+  font-weight: 500;
+  line-height: 1.15;
+  text-wrap: balance;
+  max-width: 26ch;
+}
+.j13[dir='rtl'] .j13-quote blockquote p {
+  line-height: 1.45;
+}
+.j13-quote figcaption {
+  display: grid;
+  gap: 2px;
+}
+.j13-quote figcaption b {
+  font-weight: 600;
+}
+.j13-quote figcaption span {
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+.j13-people {
+  display: grid;
+  gap: var(--s-2);
+}
+.j13-person {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: var(--s-3);
+  align-items: center;
+  padding: var(--s-2);
+  text-align: start;
+  border-radius: 2px;
+  transition: background-color var(--t-base);
+}
+.j13-person__avatar {
+  --cut: 8px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+.j13-person b {
+  display: block;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--text-2);
+}
+.j13-person span {
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+.j13-person:hover {
+  background: rgba(61, 123, 255, 0.08);
+}
+.j13-person[aria-selected='true'] .j13-person__avatar {
+  color: #fff;
+  background: var(--cobalt-body);
+  border-color: transparent;
+}
+.j13-person[aria-selected='true'] b {
+  color: var(--text);
+}
+
+/* 7 · Contact */
+.j13-contact {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(28px, 5vw, 96px);
+  align-items: center;
+}
+.j13-contact__copy {
+  display: grid;
+  gap: var(--s-5);
+}
+.j13-direct {
+  display: grid;
+  gap: var(--s-3);
+  margin-top: var(--s-4);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--line);
+}
+.j13-direct a,
+.j13-direct p {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  font-size: var(--fs-small);
+  color: var(--text-2);
+  text-decoration: none;
+}
+.j13-direct a:hover {
+  color: var(--text);
+}
+.j13-direct svg {
+  color: var(--accent-2);
+  flex: none;
+}
+.j13-contact__form {
+  padding: clamp(22px, 2.6vw, 40px);
+}
+.j13-contact__form .j13-form__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-4);
+}
+.j13-contact__submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+}
+.j13-sent {
+  display: grid;
+  gap: var(--s-4);
+  justify-items: start;
+  min-height: 320px;
+  align-content: center;
+}
+.j13-sent svg {
+  color: var(--success);
+}
+.j13-foot {
+  position: absolute;
+  left: var(--gutter);
+  right: calc(var(--rail-w) + var(--gutter));
+  bottom: var(--s-4);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+.j13-foot nav {
+  display: flex;
+  gap: var(--s-4);
+}
+.j13-foot a {
+  text-decoration: none;
+}
+.j13-foot a:hover {
+  color: var(--text);
+}
+
+/* ---------- 8. Responsive ---------------------------------------------- */
+
+/* Deck needs room. Below it the page becomes a normal scroll ("flow"). */
+@media (max-width: 1100px) {
+  .j13-services,
+  .j13-platforms,
+  .j13-contact,
+  .j13-voices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .j13-work {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .j13-work__list {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(200px, 1fr);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .j13-orbit {
+    width: min(100%, 420px);
+  }
+  .j13-hero__copy {
+    max-width: 100%;
+  }
+  .j13-people {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 899px) {
+  .j13 {
+    --nav-h: 64px;
+    --rail-w: 40px;
+  }
+  .j13-slide {
+    padding-top: calc(var(--nav-h) + var(--s-7));
+    padding-bottom: var(--s-8);
+  }
+  .j13-hero {
+    min-height: calc(100svh - var(--nav-h) - var(--s-7) - var(--s-8));
+  }
+  .j13-hero__title .j13-line:nth-child(2) {
+    padding-inline-start: 0.4em;
+  }
+  .j13-telemetry {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .j13-telemetry > div:nth-child(3) {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+  }
+  .j13-process__head,
+  .j13-studio__row,
+  .j13-phase,
+  .j13-case {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .j13-track {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-1);
+  }
+  .j13-track::before {
+    inset-inline-start: 21px;
+    inset-inline-end: auto;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    height: auto;
+  }
+  .j13-track__fill {
+    display: none;
+  }
+  .j13-step {
+    grid-template-columns: 44px 1fr;
+    gap: 0 var(--s-4);
+    align-items: center;
+  }
+  .j13-step__node {
+    grid-row: span 2;
+  }
+  .j13-studio__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .j13-case__media {
+    aspect-ratio: 16 / 10;
+  }
+  .j13-rail__count,
+  .j13-rail__hint {
+    display: none;
+  }
+  .j13-rail__btn {
+    width: 28px;
+    height: 30px;
+  }
+  .j13-rail__pip {
+    height: 20px;
+    transform: translateY(calc(var(--rail-i, 0) * 30px));
+  }
+  .j13-rail__label {
+    display: none;
+  }
+  .j13-foot {
+    position: static;
+    margin-top: var(--s-7);
+  }
+  .j13-nav__cta {
+    display: none;
+  }
+}
+
+@media (max-width: 599px) {
+  .j13-commit,
+  .j13-phase__points,
+  .j13-contact__form .j13-form__row,
+  .j13-people {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .j13-hero__actions .j13-btn {
+    flex: 1 1 100%;
+  }
+  .j13-telemetry b {
+    font-size: 1.125rem;
+  }
+  .j13-telemetry > div {
+    flex-direction: column;
+    gap: 0;
+  }
+  .j13-people {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .j13-person {
+    grid-template-columns: 40px;
+  }
+  .j13-person > div {
+    display: none;
+  }
+}
+
+/* ---------- 9. Reduced motion ----------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .j13 *,
+  .j13 *::before,
+  .j13 *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .j13-scan {
+    display: none;
+  }
+}
+
+.j13-slide:focus {
+  outline: none;
+}
+.j13[dir='rtl'] .j13-quote__mark {
+  transform: scaleX(-1);
+}
+.j13-rail__list ol {
+  display: grid;
+}
+@media (max-height: 820px) {
+  .j13-rail__hint {
+    display: none;
+  }
+}
+/* chrome is lit per line so a wrapped heading never reads as one highlighted phrase */
+.j13-chrome .j13-split-line {
+  background: var(--chrome-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.j13-voices__panel {
+  padding: var(--s-5);
+}
+/* In the scrolling layout the ribbon sits under running text: keep it atmospheric */
+@media (max-width: 899px) {
+  .j13-canvas.is-ready canvas {
+    opacity: 0.42;
+  }
+}
+/* In the scrolling layout copy passes under the nav; give it a floor */
+.j13[data-mode='flow'] .j13-nav {
+  background: linear-gradient(180deg, var(--bg) 55%, transparent);
+}
+
+/* ==========================================================================
+   v2: merged with the current home (landing-2): 3D icon set, light/dark
+   section rhythm, badge, arrow chip, stack, plans, values.
+   ========================================================================== */
+
+/* Ambient light: two fixed layers cross-fade when the page changes tone */
+.j13-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.j13-ambient i {
+  position: absolute;
+  inset: 0;
+  transition: opacity 900ms var(--ease-in-out);
+}
+.j13-ambient i:first-child {
+  background:
+    radial-gradient(1200px 700px at 78% 30%, rgba(20, 86, 255, 0.16), transparent 62%),
+    radial-gradient(800px 600px at 8% 100%, rgba(122, 77, 255, 0.08), transparent 70%),
+    linear-gradient(180deg, #020611 0%, #030a1c 100%);
+}
+.j13-ambient i:last-child {
+  opacity: 0;
+  background:
+    radial-gradient(1100px 700px at 78% 30%, rgba(20, 86, 255, 0.1), transparent 62%),
+    radial-gradient(800px 600px at 8% 100%, rgba(46, 197, 255, 0.1), transparent 70%),
+    radial-gradient(circle, rgba(106, 153, 255, 0.16) 1.2px, transparent 1.5px) 0 0 / 18px 18px,
+    linear-gradient(180deg, #ffffff 0%, #eef2fa 100%);
+}
+.j13[data-theme='light'] .j13-ambient i:first-child {
+  opacity: 0;
+}
+.j13[data-theme='light'] .j13-ambient i:last-child {
+  opacity: 1;
+}
+.j13-slide {
+  color: var(--text);
+}
+/* In the scrolling layout each section paints its own tone */
+.j13[data-mode='flow'] .j13-slide[data-theme='light'] {
+  background:
+    radial-gradient(900px 500px at 70% 20%, rgba(20, 86, 255, 0.07), transparent 65%),
+    linear-gradient(180deg, #ffffff 0%, #eef2fa 100%);
+}
+
+/* 3D icon (rendered PNG set) */
+.j13-icon3d {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--size);
+  height: var(--size);
+}
+.j13-icon3d img {
+  /* sources are 3:2 with the object centred; cover crops the empty sides */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: drop-shadow(0 8px 18px rgba(20, 86, 255, 0.35));
+  user-select: none;
+}
+[data-theme='light'] .j13-icon3d img {
+  filter: drop-shadow(0 8px 14px rgba(20, 86, 255, 0.22));
+}
+
+/* Badge: the live pill from the current home */
+.j13-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  width: fit-content;
+  min-height: 38px;
+  padding: 0 var(--s-4);
+  font-size: var(--fs-small);
+  color: var(--text-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+}
+.j13-badge__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  animation: j13-ping 2.4s var(--ease-out) infinite;
+}
+@keyframes j13-ping {
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 197, 255, 0.55);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 10px rgba(46, 197, 255, 0);
+  }
+}
+
+/* Arrow chip inside buttons: the white circle of the home CTA, chamfered */
+.j13-btn__chip {
+  --cut: 7px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-inline-end: -14px;
+  color: var(--j13-cobalt);
+  background: #fff;
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  box-shadow: inset 0 -2px 0 rgba(20, 86, 255, 0.15);
+}
+.j13-btn--ghost .j13-btn__chip {
+  color: #fff;
+  background: var(--j13-cobalt);
+}
+
+/* Nav links */
+.j13-nav__links {
+  display: none;
+  gap: var(--s-1);
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+.j13-nav__links a {
+  padding: 8px 16px;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--text-2);
+  text-decoration: none;
+  border-radius: var(--radius-pill);
+  transition: color var(--t-fast), background-color var(--t-base);
+}
+.j13-nav__links a:hover {
+  color: var(--text);
+}
+.j13-nav__links a[aria-current='true'] {
+  color: #fff;
+  background: var(--j13-cobalt);
+}
+@media (min-width: 1200px) {
+  .j13-nav__links {
+    display: flex;
+  }
+}
+
+/* Services: icon list + illustrated lens */
+.j13-index__item {
+  gap: var(--s-3);
+}
+.j13-index__icon {
+  opacity: 0.45;
+  filter: grayscale(0.7);
+  transition: opacity var(--t-base), filter var(--t-base), transform var(--t-slow) var(--ease-spring);
+}
+.j13-index__item:hover .j13-index__icon,
+.j13-index__item[aria-selected='true'] .j13-index__icon {
+  opacity: 1;
+  filter: none;
+}
+.j13-index__item[aria-selected='true'] .j13-index__icon {
+  transform: scale(1.12) rotate(-4deg);
+}
+.j13-index__item[aria-selected='true']::before {
+  width: clamp(14px, 1.6vw, 24px);
+}
+.j13-lens {
+  position: relative;
+  min-height: 460px;
+  padding-top: clamp(150px, 19vh, 200px);
+}
+.j13-lens__art {
+  position: absolute;
+  top: clamp(-40px, -3vh, -20px);
+  inset-inline-end: clamp(12px, 3vw, 40px);
+  z-index: 1;
+  width: 220px;
+  height: 220px;
+  perspective: 700px;
+  pointer-events: none;
+}
+.j13-lens__art-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+.j13-lens__art .j13-icon3d {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--t-base);
+}
+.j13-lens__art .j13-icon3d.is-on {
+  opacity: 1;
+  animation: j13-float 6s ease-in-out infinite;
+}
+/* the lens lets its illustration break out of the top edge */
+.j13-slab.j13-lens {
+  clip-path: none;
+  background: none;
+}
+.j13-slab.j13-lens::before {
+  inset: 0;
+  border: 1px solid var(--line-strong);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+@keyframes j13-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Process nodes carry the 3D step icon */
+.j13-track::before {
+  top: 34px;
+}
+.j13-track__fill {
+  top: 33px;
+}
+.j13-step__node {
+  --cut: 10px;
+  position: relative;
+  width: 68px;
+  height: 68px;
+  background: var(--surface-strong);
+}
+.j13-step__node i {
+  position: absolute;
+  inset-inline-end: 6px;
+  bottom: 3px;
+  font-style: normal;
+  font-size: 10px;
+  color: var(--text-3);
+}
+.j13-step[aria-selected='true'] .j13-step__node {
+  background: radial-gradient(circle at 50% 40%, rgba(46, 197, 255, 0.35), transparent 70%), var(--bg-raise);
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.j13-step[aria-selected='true'] .j13-step__node i {
+  color: var(--accent);
+}
+.j13-step:not([aria-selected='true']) .j13-step__node .j13-icon3d {
+  filter: saturate(0.5);
+  opacity: 0.75;
+}
+
+/* Stack: isometric plates */
+.j13-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(24px, 4vw, 72px);
+  align-items: center;
+}
+.j13-stack__copy {
+  display: grid;
+  gap: var(--s-5);
+}
+.j13-layers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-2);
+}
+.j13-layer {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 52px;
+  padding: var(--s-2) var(--s-3);
+  font-weight: 500;
+  font-size: var(--fs-small);
+  text-align: start;
+  color: var(--text-2);
+  border: 1px solid var(--line);
+  transition: color var(--t-fast), border-color var(--t-base), background-color var(--t-base);
+}
+.j13-layer:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+.j13-layer[aria-selected='true'] {
+  color: var(--text);
+  border-color: var(--accent-2);
+  background: linear-gradient(90deg, rgba(20, 86, 255, 0.2), transparent);
+}
+.j13-stack__stage {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--s-5);
+}
+.j13-iso {
+  position: relative;
+  width: min(290px, 24vw);
+  aspect-ratio: 1;
+  margin-block: clamp(60px, 9vh, 110px) 0;
+  transform: rotateX(58deg) rotateZ(-45deg);
+  transform-style: preserve-3d;
+}
+.j13-plate {
+  --cut: 18px;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: end start;
+  padding: 14px 18px;
+  transform: translateZ(calc(var(--i) * 30px));
+  background:
+    linear-gradient(135deg, rgba(61, 123, 255, 0.28), rgba(20, 86, 255, 0.06)),
+    rgba(6, 16, 42, 0.72);
+  border: 1px solid rgba(120, 170, 255, 0.4);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  transition: transform var(--t-slow) var(--ease-spring), background var(--t-base);
+}
+.j13-plate.is-active {
+  transform: translateZ(calc(var(--i) * 30px + 46px));
+  background:
+    linear-gradient(135deg, rgba(46, 197, 255, 0.55), rgba(20, 86, 255, 0.35)),
+    rgba(10, 30, 90, 0.9);
+  border-color: rgba(160, 220, 255, 0.9);
+}
+.j13-plate__label {
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(238, 243, 255, 0.9);
+}
+[data-theme='light'] .j13-plate {
+  background: linear-gradient(135deg, rgba(20, 86, 255, 0.16), rgba(255, 255, 255, 0.7)), rgba(255, 255, 255, 0.75);
+  border-color: rgba(20, 86, 255, 0.35);
+}
+[data-theme='light'] .j13-plate.is-active {
+  background: linear-gradient(135deg, rgba(46, 197, 255, 0.6), rgba(20, 86, 255, 0.6)), #fff;
+}
+[data-theme='light'] .j13-plate__label {
+  color: var(--j13-ink);
+}
+.j13-layer-panel {
+  --cut: 18px;
+  width: min(100%, 520px);
+  display: grid;
+  gap: var(--s-4);
+  padding: var(--s-5);
+}
+.j13-layer-panel__head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+}
+
+/* Plans */
+.j13-plans {
+  display: grid;
+  gap: clamp(24px, 4vh, 48px);
+}
+.j13-plans__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: var(--s-6);
+  align-items: end;
+}
+.j13-plans__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-5);
+  align-items: stretch;
+}
+.j13-plan {
+  display: grid;
+  grid-template-rows: auto auto auto auto 1fr auto;
+  gap: var(--s-3);
+  padding: clamp(20px, 2.2vw, 32px);
+}
+.j13-plan.is-featured {
+  --slab-edge: linear-gradient(150deg, var(--j13-cyan), var(--j13-cobalt) 45%, rgba(20, 86, 255, 0.3) 70%, var(--j13-cyan));
+  transform: translateY(-10px);
+}
+.j13-plan__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.j13-plan__flag {
+  padding: 5px 12px;
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  color: #fff;
+  background: var(--cobalt-body);
+  border-radius: var(--radius-pill);
+}
+.j13-plan__price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+.j13-plan__price b {
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1;
+}
+.j13-plan__price span {
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+.j13-plan__features {
+  display: grid;
+  gap: var(--s-2);
+  align-content: start;
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+}
+.j13-plan__features li {
+  display: flex;
+  gap: var(--s-2);
+  align-items: baseline;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+.j13-plan__features svg {
+  flex: none;
+  color: var(--accent);
+  transform: translateY(3px);
+}
+.j13-plan__cta {
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* Studio: statement, values, metrics */
+.j13-studio {
+  gap: clamp(24px, 4.5vh, 56px);
+}
+.j13-studio__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
+  gap: var(--s-6);
+  align-items: end;
+}
+.j13-studio__statement {
+  font-size: clamp(2rem, 3.8vw, 4.25rem);
+  max-width: 20ch;
+}
+.j13-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-5);
+}
+.j13-values li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px var(--s-4);
+  align-items: center;
+  padding: var(--s-4);
+  border: 1px solid var(--line);
+  background: linear-gradient(160deg, rgba(61, 123, 255, 0.08), transparent 60%);
+}
+.j13-values .j13-icon3d {
+  grid-row: span 2;
+}
+.j13-metric__label {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+.j13-studio__metrics .j13-metric {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+}
+
+/* Voices */
+.j13-stars {
+  display: flex;
+  gap: 3px;
+  color: #ffc23d;
+  margin-bottom: var(--s-2);
+}
+.j13-place {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.j13-place svg {
+  color: var(--accent-2);
+}
+.j13-place i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--text-3);
+}
+
+/* Work thumbs */
+.j13-work__pick {
+  align-items: center;
+}
+.j13-work__thumb {
+  grid-row: span 2;
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+  filter: saturate(0.6);
+  transition: filter var(--t-base);
+}
+.j13-work__pick[aria-selected='true'] .j13-work__thumb,
+.j13-work__pick:hover .j13-work__thumb {
+  filter: none;
+}
+
+/* Platforms commitments with 3D icons */
+.j13-commit .j13-icon3d {
+  grid-row: span 2;
+}
+
+/* Contact */
+.j13-promises {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.j13-promises li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 4px 14px 4px 6px;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+.j13-channels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-2);
+}
+.j13-channels a,
+.j13-channels div {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  height: 100%;
+  padding: var(--s-3);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  transition: border-color var(--t-base), background-color var(--t-base);
+}
+.j13-channels a:hover {
+  border-color: var(--accent-2);
+  background: rgba(20, 86, 255, 0.08);
+}
+.j13-channels span {
+  display: grid;
+  min-width: 0;
+}
+.j13-channels small {
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+.j13-channels b {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.j13-socials {
+  display: flex;
+  gap: var(--s-1);
+}
+.j13-socials a,
+.j13-socials span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  transition: transform var(--t-base) var(--ease-spring);
+}
+.j13-socials a:hover {
+  transform: translateY(-3px);
+}
+.j13-foot {
+  align-items: center;
+}
+
+/* Responsive for the v2 parts */
+@media (max-width: 1100px) {
+  .j13-stack,
+  .j13-studio__top,
+  .j13-plans__head,
+  .j13-plans__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .j13-plan.is-featured {
+    transform: none;
+  }
+  .j13-iso {
+    width: min(260px, 60vw);
+  }
+}
+@media (max-width: 899px) {
+  .j13-values {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .j13-step__node {
+    width: 56px;
+    height: 56px;
+  }
+  .j13-step {
+    grid-template-columns: 56px 1fr;
+  }
+  .j13-lens {
+    padding-top: 150px;
+  }
+  .j13-lens__art {
+    width: 170px;
+    height: 170px;
+    top: -10px;
+  }
+}
+@media (max-width: 599px) {
+  .j13-channels,
+  .j13-layers {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .j13-badge__dot,
+  .j13-lens__art .j13-icon3d.is-on {
+    animation: none;
+  }
+}
+@media (max-width: 1100px) {
+  /* the plates rise out of their box; give them the room they rise into */
+  .j13-iso {
+    width: min(220px, 56vw);
+    margin-block: 170px 0;
+  }
+}
+
+/* ==========================================================================
+   v3: motion layer. Boot screen, light blades, cursor, magnetic and tilt,
+   slab spotlight, ripple, headline glint, decode, flowing track.
+   ========================================================================== */
+
+/* Boot screen */
+.j13-boot {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--s-6);
+  color: var(--j13-chrome);
+  background:
+    radial-gradient(600px 400px at 50% 45%, rgba(20, 86, 255, 0.22), transparent 70%),
+    var(--j13-abyss);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  cursor: progress;
+}
+.j13-boot__mark {
+  width: min(260px, 60vw);
+  filter: drop-shadow(0 0 30px rgba(20, 86, 255, 0.45));
+  animation: j13-boot-breathe 2.4s ease-in-out infinite;
+}
+.j13-boot__mark img {
+  width: 100%;
+  height: auto;
+}
+.j13-boot__meter {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  width: min(320px, 70vw);
+}
+.j13-boot__bar {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  background: rgba(150, 180, 255, 0.18);
+  overflow: hidden;
+}
+.j13-boot__bar i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--j13-cobalt), var(--j13-cyan));
+  box-shadow: 0 0 12px rgba(46, 197, 255, 0.8);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+.j13-boot__num {
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+  color: var(--j13-mist);
+}
+@keyframes j13-boot-breathe {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Light blades: three translucent cobalt bands with lit leading edges */
+.j13-blades {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-slides) + 2);
+  pointer-events: none;
+  overflow: hidden;
+}
+.j13-blades i {
+  position: absolute;
+  left: -10%;
+  width: 120%;
+  top: 0;
+  opacity: 0;
+  transform: translateY(120vh);
+  background: linear-gradient(180deg, rgba(150, 220, 255, 0.9) 0, rgba(46, 140, 255, 0.35) 3px, rgba(20, 86, 255, 0.12) 40%, transparent 100%);
+  box-shadow: 0 -2px 30px rgba(46, 197, 255, 0.45);
+}
+.j13-blades i:nth-child(1) {
+  height: 26vh;
+}
+.j13-blades i:nth-child(2) {
+  height: 12vh;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0, rgba(46, 197, 255, 0.3) 2px, rgba(20, 86, 255, 0.08) 50%, transparent 100%);
+}
+.j13-blades i:nth-child(3) {
+  height: 5vh;
+}
+
+/* Cursor companion */
+.j13-cursor {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  pointer-events: none;
+}
+.j13-cursor__dot,
+.j13-cursor__ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transition: opacity var(--t-base);
+}
+:root.j13-has-cursor .j13-cursor__dot,
+:root.j13-has-cursor .j13-cursor__ring {
+  opacity: 1;
+}
+.j13-cursor__dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: var(--j13-cyan);
+  box-shadow: 0 0 10px rgba(46, 197, 255, 0.9);
+}
+.j13-cursor__ring {
+  --cut: 8px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  border: 1px solid rgba(46, 197, 255, 0.55);
+  clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+  transition: width var(--t-base) var(--ease-out), height var(--t-base) var(--ease-out), margin var(--t-base) var(--ease-out),
+    background-color var(--t-base), border-color var(--t-base), opacity var(--t-base);
+}
+.j13-cursor__ring i {
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+.j13-cursor__ring[data-state='hot'] {
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
+  border-color: rgba(46, 197, 255, 0.9);
+  background: rgba(20, 86, 255, 0.08);
+}
+.j13-cursor__ring[data-state='label'] {
+  width: 76px;
+  height: 76px;
+  margin: -38px 0 0 -38px;
+  border-color: transparent;
+  background: rgba(20, 86, 255, 0.85);
+}
+.j13-cursor__ring[data-state='text'] {
+  opacity: 0 !important;
+}
+.j13-cursor__ring.is-down {
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+}
+
+/* Slab spotlight: the lit edge follows the pointer */
+.j13-slab::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(46, 197, 255, 0.16), transparent 60%);
+  transition: opacity var(--t-slow) var(--ease-out);
+}
+.j13-slab.is-lit::after {
+  opacity: 1;
+}
+[data-theme='light'] .j13-slab::after {
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(20, 86, 255, 0.1), transparent 60%);
+}
+
+/* Press ripple */
+.j13-ripple {
+  position: absolute;
+  z-index: -1;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.55);
+  transform: rotate(45deg) scale(0);
+  animation: j13-ripple 650ms var(--ease-out) forwards;
+}
+.j13-btn--ghost .j13-ripple {
+  background: rgba(46, 197, 255, 0.45);
+}
+@keyframes j13-ripple {
+  to {
+    transform: rotate(45deg) scale(26);
+    opacity: 0;
+  }
+}
+
+/* Headline glint: a light sweep crosses the chrome letters every few seconds */
+.j13-hero__title .j13-char {
+  background-image:
+    linear-gradient(100deg, transparent 42%, var(--glint, rgba(255, 255, 255, 0.95)) 50%, transparent 58%),
+    var(--chrome-text);
+  background-size: 400% 100%, 100% 100%;
+  background-position: 120% 0, 0 0;
+  animation: j13-glint 7s var(--ease-in-out) infinite;
+  animation-delay: calc(2.2s + var(--ci, 0) * 45ms);
+}
+[data-theme='light'] .j13-hero__title .j13-char {
+  --glint: rgba(46, 197, 255, 0.95);
+}
+@keyframes j13-glint {
+  0% {
+    background-position: 120% 0, 0 0;
+  }
+  22%,
+  100% {
+    background-position: -20% 0, 0 0;
+  }
+}
+
+/* Rail counter rolls on change */
+.j13-rail__count b {
+  display: inline-block;
+  animation: j13-roll 600ms var(--ease-out);
+}
+@keyframes j13-roll {
+  from {
+    transform: translateY(70%);
+    opacity: 0;
+    filter: blur(3px);
+  }
+}
+
+/* Process: light flows along the filled track */
+.j13-track__fill {
+  background: linear-gradient(90deg, var(--j13-cobalt), var(--accent-2), #fff, var(--accent-2), var(--j13-cobalt)) 0 0 / 200% 100%;
+  animation: j13-flow 2.4s linear infinite;
+}
+@keyframes j13-flow {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Featured plan lift uses `translate` so tilt can own `transform` */
+.j13-plan.is-featured {
+  transform: none;
+  translate: 0 -10px;
+}
+@media (max-width: 1100px) {
+  .j13-plan.is-featured {
+    translate: none;
+  }
+}
+
+/* Decode keeps glyph widths steady */
+[data-decode] {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Services index: the active item shifts in, others breathe on hover */
+.j13-index__item {
+  transition: color var(--t-base) var(--ease-out), padding var(--t-slow) var(--ease-out), letter-spacing var(--t-slow) var(--ease-out);
+}
+.j13-index__item:hover {
+  padding-inline-start: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .j13-hero__title .j13-char,
+  .j13-track__fill,
+  .j13-boot__mark,
+  .j13-rail__count b {
+    animation: none;
+  }
+  .j13-cursor,
+  .j13-blades {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   v4: audit fixes. Rail capsule, stack plates, richer phase panel,
+   testimonial rotation, calmer form surface.
+   ========================================================================== */
+
+/* Rail sits in a glass capsule so the ribbon passing behind never hurts it */
+.j13-rail {
+  padding: 12px 4px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+.j13-rail__hint {
+  margin-bottom: 4px;
+}
+
+/* Stack: plates breathe apart; only the chosen layer is named on the object */
+.j13-plate {
+  transform: translateZ(calc(var(--i) * 38px));
+}
+.j13-plate.is-active {
+  transform: translateZ(calc(var(--i) * 38px + 54px));
+  box-shadow: 0 0 40px rgba(46, 197, 255, 0.35);
+}
+.j13-plate__label {
+  opacity: 0;
+  transition: opacity var(--t-base);
+}
+.j13-plate.is-active .j13-plate__label {
+  opacity: 1;
+}
+
+/* Process: the phase panel gets its own illustration, meta and stepping */
+.j13-phase {
+  grid-template-columns: auto minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(20px, 3vw, 44px);
+}
+.j13-phase__art {
+  display: grid;
+  place-items: center;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(46, 197, 255, 0.22), transparent 70%);
+}
+.j13-phase__art .j13-icon3d {
+  animation: j13-float 6s ease-in-out infinite;
+}
+.j13-phase__body {
+  display: grid;
+  gap: var(--s-2);
+}
+.j13-phase__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--accent);
+}
+.j13-phase__meta i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.j13-phase__side {
+  display: grid;
+  gap: var(--s-5);
+}
+.j13-phase__side .j13-btn {
+  white-space: normal;
+  text-align: start;
+}
+
+/* Clients: a progress line runs under the selected person */
+.j13-voices__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--s-3);
+}
+.j13-icon-btn--sm {
+  --cut: 7px;
+  width: 32px;
+  height: 32px;
+}
+.j13-person {
+  position: relative;
+  overflow: hidden;
+}
+.j13-person[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--j13-cobalt), var(--accent-2));
+  transform: scaleX(var(--p, 0));
+  transform-origin: 0 50%;
+}
+.j13[dir='rtl'] .j13-person[aria-selected='true']::after {
+  transform-origin: 100% 50%;
+}
+
+/* Contact: a calmer, more solid form surface over the spiral */
+.j13-contact__form::before {
+  background:
+    radial-gradient(120% 80% at 0% 0%, rgba(61, 123, 255, 0.12), transparent 60%),
+    var(--surface-strong);
+}
+
+@media (max-width: 1100px) {
+  .j13-phase {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .j13-phase__art {
+    width: 110px;
+    height: 110px;
+  }
+}
+@media (max-width: 899px) {
+  .j13-rail {
+    padding: 8px 2px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .j13-phase__art .j13-icon3d {
+    animation: none;
+  }
+}
+.j13-iso {
+  margin-block: clamp(96px, 13vh, 150px) 0;
+}
+@media (max-width: 1100px) {
+  .j13-iso {
+    margin-block: 190px 0;
+  }
+}
+/* step icons always fit inside their node */
+.j13-step__node .j13-icon3d {
+  width: 80%;
+  height: 80%;
+}
+
+/* ---------- v5: overflow safety ----------------------------------------
+   A slide that is taller than the screen (short laptops, big text zoom)
+   scrolls inside itself instead of being clipped; centring never pushes
+   content above the top edge. */
+.j13[data-mode='deck'] .j13-slide {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  align-content: safe center;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+/* The footer is part of the contact layout, never laid over it */
+.j13-foot,
+.j13:not([dir='rtl']) .j13-foot,
+.j13[dir='rtl'] .j13-foot {
+  position: static;
+  grid-column: 1 / -1;
+  margin-top: var(--s-5);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+}
+.j13-slide--contact .j13-slide__inner {
+  padding-bottom: 0;
+}
+
+/* Short laptop screens (e.g. 1280×720, 1366×768): the deck tightens so each
+   scene still fits on one screen; anything left over scrolls inside it. */
+@media (min-width: 1101px) and (max-height: 860px) {
+  .j13 {
+    --nav-h: 66px;
+    --fs-hero: clamp(3rem, 6.6vw, 7.5rem);
+    --fs-h2: clamp(1.9rem, 3.3vw, 3.4rem);
+  }
+  .j13[dir='rtl'] {
+    --fs-hero: clamp(2.6rem, 5.8vw, 6.5rem);
+  }
+  .j13-slide {
+    padding-top: calc(var(--nav-h) + 14px);
+    padding-bottom: 24px;
+  }
+  .j13-hero {
+    min-height: calc(100svh - var(--nav-h) - 38px);
+    gap: var(--s-5);
+  }
+  .j13-hero__copy {
+    gap: var(--s-4);
+  }
+  .j13-services__head {
+    margin-bottom: var(--s-4);
+  }
+  .j13-lens {
+    min-height: 0;
+  }
+  /* contact */
+  .j13-contact__copy {
+    gap: var(--s-3);
+  }
+  .j13-contact__form {
+    padding: 20px 24px;
+  }
+  .j13-form {
+    gap: 10px;
+  }
+  .j13-input {
+    min-height: 40px;
+    padding-block: 8px;
+  }
+  textarea.j13-input {
+    min-height: 64px;
+  }
+  .j13-channels a,
+  .j13-channels div {
+    padding: 8px 10px;
+  }
+  .j13-foot {
+    margin-top: var(--s-3);
+    padding-top: var(--s-2);
+  }
+  /* clients */
+  .j13-voices__panel {
+    padding: var(--s-4);
+  }
+  .j13-person {
+    padding: 4px 6px;
+  }
+  .j13-person__avatar {
+    width: 34px;
+    height: 34px;
+  }
+  .j13-quote {
+    gap: var(--s-4);
+  }
+  .j13-quote blockquote p {
+    font-size: clamp(1.5rem, 2.5vw, 2.4rem);
+  }
+  /* stack */
+  .j13-iso {
+    width: min(240px, 19vw);
+    margin-block: 80px 0;
+  }
+  .j13-layer-panel {
+    padding: var(--s-4);
+    gap: var(--s-3);
+  }
+  /* plans */
+  .j13-plans {
+    gap: var(--s-5);
+  }
+  .j13-plan {
+    padding: 18px 22px;
+    gap: 8px;
+  }
+  .j13-plan__features {
+    gap: 4px;
+    padding-top: 8px;
+  }
+  .j13-plan .j13-icon3d {
+    --size: 44px !important;
+  }
+  /* studio */
+  .j13-studio {
+    gap: var(--s-5);
+  }
+  /* process */
+  .j13-process {
+    gap: var(--s-5);
+  }
+  .j13-phase__art {
+    width: 110px;
+    height: 110px;
+  }
+}
+/* contact: name / email / company share one row on wide forms; the footer
+   closes the copy column instead of adding a band under both columns */
+.j13-contact__form .j13-form__row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.j13-contact__copy .j13-foot {
+  grid-column: auto;
+  margin-top: var(--s-2);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px var(--s-4);
+}
+.j13-contact__copy .j13-foot > span:nth-child(2) {
+  grid-row: 2;
+}
+.j13-contact__copy .j13-foot .j13-socials {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
+}
+@media (max-width: 599px) {
+  .j13-contact__form .j13-form__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* clip-path hides the button sheen visually but not from layout overflow;
+   without this the parked sheen widens the page in RTL */
+.j13-btn {
+  overflow: hidden;
+}
+
+/* Hero headline: each line is one unbreakable unit (letters are separate
+   spans, so the browser could otherwise wrap mid-word), and the size follows
+   the smaller of width and height so three lines plus the copy always fit. */
+.j13-hero__title .j13-line {
+  white-space: nowrap;
+}
+.j13 {
+  --fs-hero: clamp(2.6rem, min(7vw, 12.5vh), 9.25rem);
+}
+.j13[dir='rtl'] {
+  --fs-hero: clamp(2.4rem, min(6.2vw, 11vh), 8rem);
+}
+.j13-hero__copy {
+  max-width: min(1040px, 66vw);
+}
+@media (max-width: 1100px) {
+  .j13 {
+    --fs-hero: clamp(2.4rem, 10.5vw, 6rem);
+  }
+  .j13[dir='rtl'] {
+    --fs-hero: clamp(2.2rem, 9vw, 5rem);
+  }
+  .j13-hero__copy {
+    max-width: 100%;
+  }
+}
+@media (min-width: 1101px) and (max-height: 860px) {
+  .j13 {
+    --fs-hero: clamp(2.6rem, min(6.6vw, 12vh), 7.5rem);
+  }
+}

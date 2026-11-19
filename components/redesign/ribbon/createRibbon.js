@@ -168,7 +168,7 @@ export function createRibbon(THREE, host, options) {
     cDeep: { value: new THREE.Color('#06123a') },
     cCobalt: { value: new THREE.Color('#1456ff') },
     cCyan: { value: new THREE.Color('#2ec5ff') },
-    cViolet: { value: new THREE.Color('#7a4dff') },
+    cViolet: { value: new THREE.Color('#2a8bff') },
   };
   const material = new THREE.ShaderMaterial({
     vertexShader,
