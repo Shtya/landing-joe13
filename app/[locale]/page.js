@@ -1,15 +1,16 @@
-import LandingTwo from '@/components/landing-2/LandingTwo';
-import { getLandingTwoContent } from '@/components/landing-2/content';
-import './landing-2/landing.css';
+import JoeRedesign from '@/components/redesign/JoeRedesign';
+import { getRedesignContent } from '@/components/redesign/content';
+import { fontVariables } from './fonts';
+import './redesign.css';
 
 export async function generateMetadata({ params: { locale } }) {
-  const copy = getLandingTwoContent(locale);
+  const copy = getRedesignContent(locale);
   return {
-    title: copy.metaTitle,
-    description: copy.metaDescription,
+    title: copy.meta.title,
+    description: copy.meta.description,
   };
 }
 
-export default function HomePage() {
-  return <LandingTwo />;
+export default function HomePage({ params: { locale } }) {
+  return <JoeRedesign locale={locale} fontClassName={fontVariables} />;
 }
