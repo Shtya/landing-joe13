@@ -13,7 +13,7 @@
   --font-text: var(--j13-font-text-latin), system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* fluid type scale (360px → 1920px) */
-  --fs-hero: clamp(2.5rem, 1rem + 6.6vw, 8.25rem);
+  --fs-hero: clamp(2.6rem, 1rem + 4.6vw, 6.6rem);
   --fs-h2: clamp(2rem, 1.1rem + 3.3vw, 4.4rem);
   --fs-h3: clamp(1.2rem, 1rem + 0.6vw, 1.6rem);
   --fs-lead: clamp(1.02rem, 0.95rem + 0.32vw, 1.28rem);
@@ -23,7 +23,7 @@
   --lh-display: 1.02;
   --lh-body: 1.6;
   --track-display: -0.035em;
-  --w-display: 600;
+  --w-display: 700;
 
   /* space */
   --gutter: clamp(16px, 4vw, 56px);
@@ -405,6 +405,7 @@ html[data-theme='light'] .j13-noise {
 .j13-cta__title {
   font-family: var(--font-display);
   font-weight: var(--w-display);
+  font-variation-settings: 'wght' var(--dw, var(--w-display));
   letter-spacing: var(--track-display);
   line-height: var(--lh-display);
   text-wrap: balance;
@@ -415,7 +416,8 @@ html[data-theme='light'] .j13-noise {
 .j13-h3 {
   font-family: var(--font-display);
   font-size: var(--fs-h3);
-  font-weight: 500;
+  font-weight: 600;
+  font-optical-sizing: auto;
   letter-spacing: -0.015em;
   line-height: 1.2;
 }
@@ -1474,8 +1476,22 @@ html.j13-has-cursor .j13-cursor__ring {
 }
 .j13-hero__inner {
   display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  grid-template-areas: 'copy art' 'proof proof';
+  align-items: center;
+  gap: clamp(28px, 4vw, 48px) clamp(16px, 3vw, 48px);
+}
+.j13-hero__copy {
+  grid-area: copy;
+  display: grid;
   justify-items: start;
-  gap: clamp(22px, 3vw, 36px);
+  gap: clamp(20px, 2.4vw, 32px);
+  min-width: 0;
+}
+.j13-hero__art {
+  grid-area: art;
+  position: relative;
+  min-width: 0;
 }
 .j13:not(.is-ready) [data-hero],
 .j13:not(.is-ready) .j13-hero__title {
@@ -1483,9 +1499,8 @@ html.j13-has-cursor .j13-cursor__ring {
 }
 .j13-hero__title {
   font-size: var(--fs-hero);
-  line-height: 0.98;
-  letter-spacing: -0.045em;
-  will-change: transform;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
 }
 .j13[dir='rtl'] .j13-hero__title {
   line-height: 1.25;
@@ -1509,6 +1524,21 @@ html.j13-has-cursor .j13-cursor__ring {
   display: inline-block;
   transform-origin: 0% 100%;
 }
+/* each letter is a variable-font cell driven by the pointer lens */
+.j13-hero__char,
+.j13[dir='rtl'] .j13-hero__word {
+  font-variation-settings: 'wght' var(--hw, 700);
+}
+.j13-hero__line.is-accent.is-split {
+  background: none;
+}
+.j13-hero__line.is-accent .j13-hero__char {
+  background-image: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
 .j13-hero__row {
   display: flex;
   flex-wrap: wrap;
@@ -1526,6 +1556,7 @@ html.j13-has-cursor .j13-cursor__ring {
   gap: 12px;
 }
 .j13-hero__proof {
+  grid-area: proof;
   display: flex;
   flex-wrap: wrap;
   gap: 12px clamp(20px, 4vw, 56px);
@@ -1584,6 +1615,96 @@ html.j13-has-cursor .j13-cursor__ring {
   }
   to {
     transform: translateY(100%);
+  }
+}
+
+/* Hero 3D scene: "Code → Product" (three.js, see hero3d/createCodeScene.js) */
+.j13-hero__art {
+  height: clamp(440px, 42vw, 660px);
+}
+.j13-scene {
+  position: absolute;
+  inset-block: -12%;
+  inset-inline-start: -14%;
+  inset-inline-end: calc(-1 * var(--gutter) + 120px);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  border-radius: var(--r-xl);
+}
+.j13-scene.is-dragging {
+  cursor: grabbing;
+}
+.j13-scene:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -8px;
+}
+.j13-scene__canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease-out);
+}
+.j13-scene.is-ready .j13-scene__canvas {
+  opacity: 1;
+}
+.j13-scene__canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.j13-scene__glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(var(--glow-rgb), 0.32), rgba(7, 156, 255, 0.08) 60%, transparent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.j13-scene.is-fallback .j13-scene__glow {
+  width: 85%;
+  background:
+    radial-gradient(closest-side, rgba(191, 232, 255, 0.5), transparent 30%),
+    radial-gradient(closest-side, rgba(var(--glow-rgb), 0.45), rgba(7, 156, 255, 0.1) 65%, transparent);
+}
+.j13-scene__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 9%;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  color: var(--text-2);
+  white-space: nowrap;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.j13[dir='rtl'] .j13-scene__hint {
+  transform: translateX(50%);
+}
+@media (max-width: 1023px) {
+  .j13-hero__art {
+    height: clamp(320px, 88vw, 520px);
+  }
+  .j13-scene {
+    inset-block: -6%;
+    inset-inline: calc(-1 * var(--gutter));
+    border-radius: 0;
+  }
+  .j13-scene__hint {
+    bottom: 4%;
   }
 }
 
@@ -2229,50 +2350,254 @@ html.j13-has-cursor .j13-cursor__ring {
   justify-items: center;
   gap: 28px;
 }
-.j13-iso {
+/* Stack tower: exploded isometric slabs with real thickness */
+.j13-tower {
+  --s: clamp(200px, 19vw, 270px);
+  --t: 12px;
+  --gap3: 50px;
+  --lift: 120px;
+  --r3: 14px;
   position: relative;
-  width: min(280px, 60vw);
-  aspect-ratio: 1;
-  margin-block: clamp(60px, 9vh, 110px) 0;
-  transform: rotateX(58deg) rotateZ(-45deg);
-  transform-style: preserve-3d;
+  width: 100%;
+  height: calc(var(--s) * 0.82 + var(--gap3) * (var(--n) - 1) + var(--lift) + 150px);
+  animation: j13-tower-float 6s ease-in-out infinite alternate;
 }
-.j13-plate {
+@keyframes j13-tower-float {
+  to {
+    transform: translateY(-12px);
+  }
+}
+.j13-tower__floor {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  width: calc(var(--s) * 1.5);
+  height: calc(var(--s) * 0.42);
+  margin-left: calc(var(--s) * -0.75);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(var(--glow-rgb), 0.45), rgba(var(--glow-rgb), 0.08) 60%, transparent);
+  filter: blur(8px);
+}
+.j13-tower__iso {
+  --tx: 0;
+  --tz: 0;
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--s) * 0.32);
+  width: var(--s);
+  height: var(--s);
+  margin-left: calc(var(--s) / -2);
+  transform-style: preserve-3d;
+  transform: rotateX(calc(58deg + var(--tx) * 1deg)) rotateZ(calc(-45deg + var(--tz) * 1deg));
+}
+
+/* one slab = top face + two visible edges + a hologram for its layer */
+.j13-slab3 {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: end start;
-  padding: 14px 18px;
-  border-radius: 22px;
-  transform: translateZ(calc(var(--i) * 28px));
-  background: linear-gradient(135deg, rgba(61, 123, 255, 0.26), rgba(20, 86, 255, 0.05)), rgba(8, 16, 42, 0.78);
-  border: 1px solid rgba(120, 170, 255, 0.36);
-  transition: transform var(--t-slow) var(--ease-spring), background var(--t-base), border-color var(--t-base);
+  transform-style: preserve-3d;
+  transform: translateZ(calc(var(--lv) * var(--gap3)));
+  transition: transform 0.9s var(--ease-out);
+  cursor: pointer;
 }
-.j13-plate.is-active {
-  transform: translateZ(calc(var(--i) * 28px + 46px));
-  background: linear-gradient(135deg, rgba(7, 156, 255, 0.6), rgba(10, 42, 140, 0.55)), rgba(6, 14, 40, 0.92);
-  border-color: rgba(170, 215, 255, 0.9);
-  box-shadow: 0 0 60px rgba(var(--glow-rgb), 0.45);
+.j13-slab3.is-above {
+  transform: translateZ(calc(var(--lv) * var(--gap3) + var(--lift)));
 }
-.j13-plate__label {
-  font-family: var(--j13-font-display-latin), sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(238, 243, 255, 0.92);
+.j13-slab3.is-active {
+  transform: translateZ(calc(var(--lv) * var(--gap3) + 16px));
+}
+.j13-slab3__top {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r3);
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 40%),
+    linear-gradient(135deg, rgba(70, 140, 255, 0.34), rgba(20, 60, 190, 0.16) 55%, rgba(8, 24, 80, 0.5));
+  box-shadow: inset 0 0 0 1px rgba(150, 200, 255, 0.34), inset 0 0 40px rgba(70, 140, 255, 0.14);
+  opacity: 0.78;
+  transition: opacity var(--t-slow) var(--ease-out), box-shadow var(--t-slow), background var(--t-slow);
+}
+.j13-slab3__grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(150, 200, 255, 0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(150, 200, 255, 0.16) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(circle at 50% 50%, #000, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000, transparent 72%);
   opacity: 0;
-  transition: opacity var(--t-base);
+  transition: opacity var(--t-slow);
 }
-.j13-plate.is-active .j13-plate__label {
+.j13-slab3__tag {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  font-family: var(--j13-font-display-latin), sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(200, 225, 255, 0.55);
+}
+.j13-slab3__side {
+  position: absolute;
+  background: linear-gradient(180deg, rgba(40, 100, 230, 0.75), rgba(10, 30, 110, 0.9));
+  opacity: 0.85;
+  transition: opacity var(--t-slow), background var(--t-slow), box-shadow var(--t-slow);
+}
+.j13-slab3__side--r {
+  top: var(--r3);
+  right: 0;
+  width: var(--t);
+  height: calc(100% - var(--r3) * 2);
+  transform-origin: 100% 50%;
+  transform: rotateY(-90deg);
+  background: linear-gradient(90deg, rgba(20, 60, 170, 0.95), rgba(8, 22, 80, 0.95));
+}
+.j13-slab3__side--b {
+  left: var(--r3);
+  bottom: 0;
+  width: calc(100% - var(--r3) * 2);
+  height: var(--t);
+  transform-origin: 50% 100%;
+  transform: rotateX(90deg);
+}
+.j13-slab3:hover .j13-slab3__top {
+  opacity: 0.95;
+}
+/* slabs above the chosen layer turn see-through so its hologram reads clearly */
+.j13-slab3.is-above .j13-slab3__top {
+  opacity: 0.42;
+}
+.j13-slab3.is-above .j13-slab3__side {
+  opacity: 0.35;
+}
+html[data-theme='light'] .j13-slab3.is-above .j13-slab3__top {
+  opacity: 0.5;
+}
+
+/* the chosen layer: bright top, glowing edges, grid lit, hologram up */
+.j13-slab3.is-active .j13-slab3__top {
+  opacity: 1;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 45%),
+    linear-gradient(135deg, rgba(7, 156, 255, 0.85), rgba(35, 108, 255, 0.7) 50%, rgba(10, 42, 140, 0.85));
+  box-shadow: inset 0 0 0 1.5px rgba(190, 230, 255, 0.95), inset 0 0 50px rgba(150, 210, 255, 0.35), 0 0 70px rgba(var(--glow-rgb), 0.7);
+}
+.j13-slab3.is-active .j13-slab3__grid {
   opacity: 1;
 }
-html[data-theme='light'] .j13-plate {
-  background: linear-gradient(135deg, rgba(35, 108, 255, 0.14), rgba(255, 255, 255, 0.8)), rgba(255, 255, 255, 0.85);
-  border-color: rgba(35, 108, 255, 0.3);
+.j13-slab3.is-active .j13-slab3__tag {
+  color: #fff;
 }
-html[data-theme='light'] .j13-plate.is-active {
-  background: linear-gradient(135deg, rgba(7, 156, 255, 0.85), rgba(10, 42, 140, 0.9));
+.j13-slab3.is-active .j13-slab3__side {
+  opacity: 1;
+  background: linear-gradient(180deg, #6fd0ff, #1f5eff);
+  box-shadow: 0 0 24px rgba(80, 190, 255, 0.9);
 }
+
+/* hologram: counter-rotated so it always faces the viewer */
+.j13-slab3__holo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  transform-origin: 50% 100%;
+  transform: translate(-50%, -100%) translateZ(10px) rotateZ(45deg) rotateX(-58deg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease-out), transform 0.9s var(--ease-out);
+}
+.j13-slab3.is-active .j13-slab3__holo {
+  opacity: 1;
+  transform: translate(-50%, -100%) translateZ(30px) rotateZ(45deg) rotateX(-58deg);
+  transition-delay: 0.15s;
+}
+.j13-slab3__holo .j13-icon3d {
+  filter: drop-shadow(0 12px 18px rgba(0, 20, 80, 0.55));
+  animation: j13-holo-bob 3s ease-in-out infinite alternate;
+}
+@keyframes j13-holo-bob {
+  to {
+    translate: 0 -8px;
+  }
+}
+.j13-slab3__holo b {
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  background: rgba(6, 14, 40, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(150, 210, 255, 0.5), 0 8px 24px rgba(0, 10, 40, 0.5);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* light beam through the tower with a travelling data pulse */
+.j13-tower__beam {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: calc(var(--h) * var(--gap3) + var(--lift) + 30px);
+  margin-left: -2px;
+  border-radius: 4px;
+  transform-origin: 50% 0;
+  transform: rotateX(90deg);
+  background: linear-gradient(180deg, rgba(110, 200, 255, 0.85), rgba(35, 108, 255, 0.25));
+  box-shadow: 0 0 18px rgba(80, 180, 255, 0.8);
+  overflow: hidden;
+}
+.j13-tower__beam i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 28%;
+  background: linear-gradient(180deg, transparent, #fff, transparent);
+  animation: j13-beam 2.4s var(--ease-in-out) infinite;
+}
+@keyframes j13-beam {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(380%);
+  }
+}
+
+html[data-theme='light'] .j13-slab3__top {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.5) 45%),
+    linear-gradient(135deg, rgba(200, 220, 255, 0.7), rgba(150, 185, 255, 0.5));
+  box-shadow: inset 0 0 0 1px rgba(35, 108, 255, 0.35), inset 0 0 30px rgba(35, 108, 255, 0.08);
+  opacity: 0.9;
+}
+html[data-theme='light'] .j13-slab3__side {
+  background: linear-gradient(180deg, rgba(120, 160, 245, 0.9), rgba(70, 110, 220, 0.9));
+}
+html[data-theme='light'] .j13-slab3__tag {
+  color: rgba(20, 50, 140, 0.55);
+}
+html[data-theme='light'] .j13-slab3.is-active .j13-slab3__top {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.35), transparent 45%),
+    linear-gradient(135deg, #079cff, #1d5cf5 50%, #0a2a8c);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.9), 0 0 60px rgba(35, 92, 245, 0.45);
+}
+html[data-theme='light'] .j13-slab3__grid {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+}
+
+@media (max-width: 767px) {
+  .j13-tower {
+    --s: clamp(160px, 46vw, 210px);
+    --gap3: 36px;
+    --lift: 130px;
+  }
+}
+
 .j13-layer-panel {
   display: grid;
   gap: 18px;
@@ -2883,6 +3208,10 @@ textarea.j13-input {
   }
   .j13-head--split {
     grid-template-columns: 1fr;
+  }
+  .j13-hero__inner {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'copy' 'art' 'proof';
   }
   .j13-impact {
     grid-template-columns: repeat(2, minmax(0, 1fr));

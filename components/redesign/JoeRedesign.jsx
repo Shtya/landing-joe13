@@ -223,7 +223,8 @@ export default function JoeRedesign({ locale, fontClassName }) {
 
       if (!prefersReducedMotion()) {
         // the ribbon is the hero's object; past the hero it recedes into atmosphere
-        gsap.fromTo(root, { '--ribbon-o': 1 }, {
+        // the 3D scene owns the hero: the ribbon is hidden there and fades in after it
+        gsap.fromTo(root, { '--ribbon-o': 0 }, {
           '--ribbon-o': 0.45,
           ease: 'none',
           scrollTrigger: { trigger: sectionRefs.current[0], start: 'top top', end: 'bottom top', scrub: true },
@@ -327,6 +328,7 @@ export default function JoeRedesign({ locale, fontClassName }) {
                 onNavigate={scrollToId}
                 scrollToEl={scrollToEl}
                 introReady={booted}
+                theme={theme}
                 prefill={meta.id === 'contact' ? prefill : undefined}
               />
             </section>

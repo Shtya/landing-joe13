@@ -1,10 +1,11 @@
-import { Unbounded, Inter_Tight, Alexandria, Readex_Pro } from 'next/font/google';
+import { Sora, Inter_Tight, Alexandria, Readex_Pro } from 'next/font/google';
 
 /*
  * JOE13 type system.
- *   Latin display  — Unbounded: wide, confident geometry for headlines.
+ *   Latin display  — Sora: geometric, open and confident; variable weight
+ *                    (100–800) so headings can fill in from thin on reveal.
  *   Latin text     — Inter Tight: compact, highly legible body copy.
- *   Arabic display — Alexandria: modern geometric Arabic that pairs with Unbounded.
+ *   Arabic display — Alexandria: modern geometric Arabic with a weight axis; pairs with Sora.
  *   Arabic text    — Readex Pro: one variable file, excellent Arabic legibility.
  *
  * Every family is variable (one file per subset), self-hosted by next/font and
@@ -14,7 +15,7 @@ import { Unbounded, Inter_Tight, Alexandria, Readex_Pro } from 'next/font/google
  * redesign.css picks the pair per locale via [dir='rtl'].
  */
 
-export const fontDisplay = Unbounded({
+export const fontDisplay = Sora({
   subsets: ['latin'],
   weight: 'variable',
   display: 'swap',

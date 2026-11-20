@@ -88,6 +88,9 @@ export function setupReveals(root) {
           gsap.from(self.lines, { yPercent: 105, duration: 1.1, ease: EASE.out, stagger: 0.09, delay, scrollTrigger: trigger }),
         });
         splits.push(split);
+        // variable-font reveal: the heading arrives thin and fills in to its weight
+        const finalWeight = parseFloat(getComputedStyle(el).getPropertyValue('--w-display')) || 720;
+        gsap.fromTo(el, { '--dw': 220 }, { '--dw': finalWeight, duration: 1.8, ease: 'power3.out', delay, scrollTrigger: trigger });
       } else if (kind === 'stagger') {
         gsap.from(el.children, { opacity: 0, y: 36, duration: 0.9, ease: EASE.out, stagger: 0.08, delay, scrollTrigger: trigger, clearProps: 'transform' });
       } else if (kind === 'scale') {

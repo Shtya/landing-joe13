@@ -94,6 +94,9 @@ export function getRedesignContent(locale) {
       badge: t('Software studio · Riyadh', 'استوديو برمجيات · الرياض'),
       lines: ar ? ['أفكار جريئة.', 'مُهندَسة', 'لتقود.'] : ['Bold ideas.', 'Engineered', 'to lead.'],
       accentLine: 1,
+      // 3D scene: hint under it and the cursor label over it
+      sceneHint: t('Drag to spin · click to build', 'اسحب للتدوير · اضغط للبناء'),
+      dragShort: t('Drag', 'اسحب'),
       sub: base.hero.sub,
       primary: t('Start a project', 'ابدأ مشروعك'),
       secondary: t('See the work', 'شاهد الأعمال'),
