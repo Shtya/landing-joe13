@@ -1,12 +1,17 @@
 import LandingTwo from '@/components/landing-2/LandingTwo';
 import { getLandingTwoContent } from '@/components/landing-2/content';
+import './tailwind.css';
 import './landing.css';
+import { localeUrl } from '@/lib/site';
 
 export async function generateMetadata({ params: { locale } }) {
   const copy = getLandingTwoContent(locale);
+  // Old landing kept for reference: out of search, canonical to the live home.
   return {
     title: copy.metaTitle,
     description: copy.metaDescription,
+    alternates: { canonical: localeUrl(locale) },
+    robots: { index: false, follow: false },
   };
 }
 

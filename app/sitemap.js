@@ -1,20 +1,17 @@
+import { DEFAULT_LOCALE, LANG_CODE, LOCALES, localeUrl } from '@/lib/site';
+
+// One URL per locale (the site is a single page; #section links are not
+// separate URLs to search engines), each listing its language versions.
 export default function sitemap() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nexus.dev'
-  const locales = ['en', 'ar']
-
-  const routes = ['', '#services', '#portfolio', '#contact']
-
-  const urls = []
-  for (const locale of locales) {
-    for (const route of routes) {
-      urls.push({
-        url: `${baseUrl}/${locale}${route}`,
-        lastModified: new Date(),
-        changeFrequency: 'monthly',
-        priority: route === '' ? 1 : 0.8,
-      })
-    }
-  }
-
-  return urls
+  const languages = {
+    ...Object.fromEntries(LOCALES.map(l => [LANG_CODE[l], localeUrl(l)])),
+    'x-default': localeUrl(DEFAULT_LOCALE),
+  };
+  return LOCALES.map(locale => ({
+    url: localeUrl(locale),
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: locale === DEFAULT_LOCALE ? 1 : 0.9,
+    alternates: { languages },
+  }));
 }

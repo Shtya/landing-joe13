@@ -1,0 +1,3 @@
+/* Tailwind utilities for the /temp landing only (see app/globals.css). */
+@tailwind components;
+@tailwind utilities;

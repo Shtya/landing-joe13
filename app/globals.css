@@ -1,6 +1,7 @@
+/* Base reset only. Tailwind utilities are used by the old /temp landing alone,
+   so they live in app/[locale]/temp/tailwind.css instead of the shared CSS the
+   home page loads before it can paint. */
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 
 :root {

@@ -1,10 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
+  // Only folders the live routes render. Scanning every components/ folder
+  // (old landings, 3d, ui…) put ~140 KB of unused utilities into the CSS the
+  // home page loads before it can paint; the redesign uses its own j13-* CSS.
   content: [
     './app/**/*.{js,jsx}',
-    './components/**/*.{js,jsx}',
-    './pages/**/*.{js,jsx}',
+    './components/redesign/**/*.{js,jsx}',
+    './components/landing-2/**/*.{js,jsx}',
   ],
   theme: {
     extend: {

@@ -19,6 +19,7 @@
  */
 
 import { SCREENS, drawScreen } from './uiTextures';
+import { GL_OPTIONS } from '../perf';
 
 const GLYPHS = ['{', '}', '<', '>', '/', ';', '=', '(', ')', '[', ']', '0', '1', '#', '*', ''];
 const ATLAS = 4; // 4×4 cells, last cell is a soft dot
@@ -238,7 +239,8 @@ export function createCodeScene(THREE, host, options) {
 
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    // Hardware only: without a GPU the scene falls back to the CSS glow (see GL_OPTIONS).
+    renderer = new THREE.WebGLRenderer(GL_OPTIONS);
   } catch {
     return null;
   }

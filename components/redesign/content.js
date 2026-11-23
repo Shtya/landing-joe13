@@ -114,7 +114,7 @@ export function getRedesignContent(locale) {
         'Every figure below is a product that shipped, a client who stayed, or an engineer who owns the work.',
         'كل رقم هنا منتج تم إطلاقه، أو عميل بقي معنا، أو مهندس يمتلك عمله.',
       ),
-      items: stats.map((s, i) => ({ ...s, icon: ['archive', 'happy-client', 'expert-team', 'measurable-results', 'network-globe', 'users'][i] })),
+      items: stats.map((s, i) => ({ ...s, icon: ['archive', 'happy-face', 'expert-team', 'measurable-results', 'network-globe', 'users'][i] })),
       platformsLabel: t('Shipping on the platforms you already trust', 'نُطلق على المنصات التي تثق بها'),
       logos: PLATFORMS,
     },

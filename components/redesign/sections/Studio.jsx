@@ -50,7 +50,7 @@ export default function Studio({ copy, index, headingId }) {
         {s.values.map((v, i) => (
           <li key={v.title} className="j13-glass j13-value" data-tilt="4">
             <span className="j13-value__num">{String(i + 1).padStart(2, '0')}</span>
-            <Icon3D name={v.icon} size={110} className="j13-value__icon" />
+            <Icon3D name={v.icon} size={120} className="j13-value__icon" />
             <h3 className="j13-h3">{v.title}</h3>
             <p>{v.body}</p>
           </li>
@@ -63,7 +63,7 @@ export default function Studio({ copy, index, headingId }) {
       <ul className="j13-commit" data-reveal="stagger">
         {s.commitments.map((c) => (
           <li key={c.title} className="j13-glass j13-commit__item">
-            <Icon3D name={c.icon} size={52} />
+            <Icon3D name={c.icon} size={72} />
             <div>
               <h4>{c.title}</h4>
               <p>{c.body}</p>

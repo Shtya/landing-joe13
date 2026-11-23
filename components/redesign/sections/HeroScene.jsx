@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Glyph from '../Glyph';
 import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion';
+import { LITE_EVENT, enableLite, isLite } from '../perf';
 
 /*
  * Hero 3D: "Code → Product" (hero3d/createCodeScene.js).
@@ -23,10 +24,19 @@ export default function HeroScene({ introReady, theme, isArabic, hint, cursorLab
   useEffect(() => {
     let disposed = false;
     const host = hostRef.current;
-    const begin = () =>
-      Promise.all([import('three'), import('three/examples/jsm/environments/RoomEnvironment.js'), import('../hero3d/createCodeScene')])
+    const begin = () => {
+      // Lite (no GPU / slow device): keep the CSS glow, skip three.js entirely.
+      if (isLite()) {
+        setState('fallback');
+        return;
+      }
+      return Promise.all([import('three'), import('three/examples/jsm/environments/RoomEnvironment.js'), import('../hero3d/createCodeScene')])
         .then(([THREE, env, mod]) => {
           if (disposed || !host) return;
+          if (isLite()) {
+            setState('fallback');
+            return;
+          }
           const api = mod.createCodeScene(THREE, host, {
             gsap,
             mirror: isArabic,
@@ -36,6 +46,7 @@ export default function HeroScene({ introReady, theme, isArabic, hint, cursorLab
             RoomEnvironment: env.RoomEnvironment,
           });
           if (!api) {
+            enableLite('no-gpu');
             setState('fallback');
             return;
           }
@@ -45,9 +56,18 @@ export default function HeroScene({ introReady, theme, isArabic, hint, cursorLab
           if (introRef.current) api.intro();
         })
         .catch(() => !disposed && setState('fallback'));
+    };
+    // Switched to lite after the scene started (slow frames): drop it for the glow.
+    const onLite = () => {
+      apiRef.current?.dispose();
+      apiRef.current = null;
+      if (!disposed) setState('fallback');
+    };
+    window.addEventListener(LITE_EVENT, onLite);
     const idle = window.requestIdleCallback ? window.requestIdleCallback(begin, { timeout: 900 }) : window.setTimeout(begin, 200);
     return () => {
       disposed = true;
+      window.removeEventListener(LITE_EVENT, onLite);
       if (window.cancelIdleCallback && typeof idle === 'number') window.cancelIdleCallback(idle);
       apiRef.current?.dispose();
       apiRef.current = null;

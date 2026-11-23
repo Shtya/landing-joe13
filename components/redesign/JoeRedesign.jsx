@@ -6,8 +6,10 @@ import { getRedesignContent } from './content';
 import { gsap, ScrollTrigger, prefersReducedMotion, setupReveals } from './motion';
 import { useSmoothScroll, scrollToTarget } from './useSmoothScroll';
 import { useInteractions } from './useInteractions';
+import { enableLite, initialLiteReason, probeFrameRate } from './perf';
 import RibbonStage from './ribbon/RibbonStage';
 import Cursor from './Cursor';
+import Diagnostics from './Diagnostics';
 import Preloader from './Preloader';
 import Nav from './chrome/Nav';
 import SectionRail from './chrome/SectionRail';
@@ -196,8 +198,22 @@ export default function JoeRedesign({ locale, fontClassName }) {
     const root = rootRef.current;
     if (!root) return undefined;
     const nav = root.querySelector('[data-nav]');
-    const cleanReveals = setupReveals(root);
-    const ctx = gsap.context(() => {
+    // Motion must never take the content down with it: if a reveal or trigger
+    // throws (old browser, blocked chunk), the page stays fully visible and static.
+    let cleanReveals = () => {};
+    try {
+      cleanReveals = setupReveals(root);
+    } catch (err) {
+      console.warn('[j13] reveals disabled:', err);
+    }
+    // Scroll-driven values are written on the few elements that read them, not
+    // on the root: an inherited custom property changing on the root forces a
+    // style recalc of the whole page on every scroll frame.
+    const progressEls = root.querySelectorAll('.j13-rail__fill, .j13-topbar i');
+    const canvasEl = root.querySelector('.j13-canvas');
+    let ctx = null;
+    try {
+    ctx = gsap.context(() => {
       sectionRefs.current.forEach((el, i) => {
         ScrollTrigger.create({
           trigger: el,
@@ -212,7 +228,8 @@ export default function JoeRedesign({ locale, fontClassName }) {
         start: 0,
         end: 'max',
         onUpdate: (self) => {
-          root.style.setProperty('--progress', self.progress.toFixed(4));
+          const p = self.progress.toFixed(4);
+          progressEls.forEach((el) => el.style.setProperty('--progress', p));
           const y = self.scroll();
           nav.toggleAttribute('data-scrolled', y > 24);
           const down = y > lastY;
@@ -224,10 +241,18 @@ export default function JoeRedesign({ locale, fontClassName }) {
       if (!prefersReducedMotion()) {
         // the ribbon is the hero's object; past the hero it recedes into atmosphere
         // the 3D scene owns the hero: the ribbon is hidden there and fades in after it
-        gsap.fromTo(root, { '--ribbon-o': 0 }, {
+        gsap.fromTo(canvasEl, { '--ribbon-o': 0 }, {
           '--ribbon-o': 0.45,
           ease: 'none',
-          scrollTrigger: { trigger: sectionRefs.current[0], start: 'top top', end: 'bottom top', scrub: true },
+          scrollTrigger: {
+            trigger: sectionRefs.current[0],
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+            // the band is invisible at the top of the hero: stop drawing it there,
+            // so only one WebGL scene renders at a time
+            onUpdate: (self) => ribbonRef.current?.setPaused(self.progress < 0.02),
+          },
         });
         // two starfield layers drift at different speeds
         root.querySelectorAll('.j13-stars i').forEach((layer, k) => {
@@ -235,10 +260,45 @@ export default function JoeRedesign({ locale, fontClassName }) {
         });
       }
     }, root);
+    } catch (err) {
+      console.warn('[j13] scroll effects disabled:', err);
+    }
     return () => {
-      ctx.revert();
+      ctx?.revert();
       cleanReveals();
     };
+  }, []);
+
+  // ---- performance guards ---------------------------------------------------------
+  // Lite mode on weak devices (see perf.js), then a frame-rate probe once the
+  // intro has settled: under ~30fps the heavy layers switch off by themselves.
+  useEffect(() => {
+    const reason = initialLiteReason();
+    if (reason) enableLite(reason);
+  }, []);
+  useEffect(() => {
+    if (!booted) return undefined;
+    let stopProbe = () => {};
+    const t = window.setTimeout(() => {
+      stopProbe = probeFrameRate();
+    }, 1500);
+    return () => {
+      window.clearTimeout(t);
+      stopProbe();
+    };
+  }, [booted]);
+
+  // Pause CSS animations in sections that are off screen (marquee, beams,
+  // spinning border…): CSS keeps running them otherwise.
+  useEffect(() => {
+    const els = sectionRefs.current.filter(Boolean);
+    if (!els.length || typeof IntersectionObserver === 'undefined') return undefined;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.target.toggleAttribute('data-offscreen', !e.isIntersecting)),
+      { rootMargin: '200px 0px' },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
 
   // page-load: refresh measurements once fonts + intro are done, honour #hash
@@ -265,6 +325,7 @@ export default function JoeRedesign({ locale, fontClassName }) {
       </noscript>
       <Preloader ready={0.12 + (fontsOk ? 0.44 : 0) + (ribbonOk ? 0.44 : 0)} onDone={() => setBooted(true)} label={copy.ui.loading} />
       <Cursor />
+      <Diagnostics />
       <a className="j13-skip" href="#main">
         {copy.ui.skip}
       </a>

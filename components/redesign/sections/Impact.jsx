@@ -17,7 +17,7 @@ export default function Impact({ copy, index, headingId }) {
         <ul className="j13-impact" data-reveal="stagger">
           {s.items.map((it, i) => (
             <li key={it.label} className={`j13-glass j13-stat j13-stat--${i}`} data-tilt="3">
-              <Icon3D name={it.icon} size={i === 0 ? 120 : 56} className="j13-stat__icon" />
+              <Icon3D name={it.icon} size={i === 0 ? 156 : 84} className="j13-stat__icon" />
               <p className="j13-stat__value">
                 <span data-count data-value={`${it.value}${it.suffix}`}>{`${it.value}${it.suffix}`}</span>
               </p>

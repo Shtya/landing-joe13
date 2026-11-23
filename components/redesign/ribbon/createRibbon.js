@@ -9,6 +9,7 @@
  */
 
 import { SHAPES } from './shapes';
+import { GL_OPTIONS, LITE_EVENT, isLite } from '../perf';
 
 const SEG = 280;
 
@@ -108,7 +109,9 @@ export function createRibbon(THREE, host, options) {
 
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    // Hardware only: software WebGL (no GPU) would run this full-screen band at
+    // a few fps and freeze the page, so the CSS ambient background takes over.
+    renderer = new THREE.WebGLRenderer(GL_OPTIONS);
   } catch (err) {
     return null;
   }
@@ -293,7 +296,8 @@ export function createRibbon(THREE, host, options) {
       requestRender();
       return;
     }
-    morphTween = gsap.to(uniforms.uMorph, { value: 1, duration: 1.9, ease: 'power3.inOut' });
+    // onUpdate draws the morph when the loop is paused (hero on screen / lite).
+    morphTween = gsap.to(uniforms.uMorph, { value: 1, duration: 1.9, ease: 'power3.inOut', onUpdate: requestRender });
     gsap.killTweensOf([uniforms.uPulse, uniforms.uPulsePos]);
     uniforms.uPulse.value = 1;
     uniforms.uPulsePos.value = -0.15;
@@ -332,6 +336,10 @@ export function createRibbon(THREE, host, options) {
 
   let last = performance.now();
   let running = false;
+  // paused: the 3D hero is on screen and the band is faded out there, so it
+  // stops drawing (one WebGL scene at a time). lite: static frame only.
+  let paused = false;
+  let lite = isLite();
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
@@ -350,7 +358,7 @@ export function createRibbon(THREE, host, options) {
     renderer.render(scene, camera);
   }
   function start() {
-    if (running || reduced) return;
+    if (running || reduced || paused || lite || document.hidden) return;
     running = true;
     last = performance.now();
     renderer.setAnimationLoop(frame);
@@ -371,15 +379,27 @@ export function createRibbon(THREE, host, options) {
   ro.observe(host);
   window.addEventListener('pointermove', onPointer, { passive: true });
   document.addEventListener('visibilitychange', onVisibility);
+  const onLite = () => {
+    lite = true;
+    stop();
+    requestRender();
+  };
+  window.addEventListener(LITE_EVENT, onLite);
   resize();
   start();
 
   return {
     goTo,
+    setPaused(value) {
+      if (paused === value) return;
+      paused = value;
+      if (paused) stop();
+      else start();
+    },
     intro() {
       if (reduced) return null;
       uniforms.uReveal.value = 0;
-      return gsap.to(uniforms.uReveal, { value: 1.01, duration: 2.6, ease: 'power2.inOut' });
+      return gsap.to(uniforms.uReveal, { value: 1.01, duration: 2.6, ease: 'power2.inOut', onUpdate: requestRender });
     },
     setLight(isLight) {
       gsap.to(uniforms.uLight, { value: isLight ? 1 : 0, duration: 0.6, onUpdate: requestRender });
@@ -393,6 +413,7 @@ export function createRibbon(THREE, host, options) {
       ro.disconnect();
       window.removeEventListener('pointermove', onPointer);
       document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener(LITE_EVENT, onLite);
       geometry.dispose();
       material.dispose();
       dustGeo.dispose();

@@ -2,6 +2,7 @@
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { enableLite } from '../perf';
 
 /**
  * Fixed full-screen WebGL layer. three.js is loaded on demand so the slide
@@ -24,6 +25,9 @@ const RibbonStage = forwardRef(function RibbonStage({ ids, index, light, mirror,
       introRef.current = true;
       return apiRef.current?.intro();
     },
+    setPaused(value) {
+      apiRef.current?.setPaused(value);
+    },
   }));
 
   useEffect(() => {
@@ -42,6 +46,9 @@ const RibbonStage = forwardRef(function RibbonStage({ ids, index, light, mirror,
       if (apiRef.current) {
         if (introRef.current) apiRef.current.intro();
         setReady(true);
+      } else {
+        // No hardware WebGL: the machine can't carry the effects either.
+        enableLite('no-gpu');
       }
       readyCb.current?.(Boolean(apiRef.current));
     }).catch(() => readyCb.current?.(false));

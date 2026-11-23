@@ -10,7 +10,8 @@ import gsap from 'gsap';
  *   .j13-glass, [data-spotlight]                     → spotlight follows the pointer (--mx/--my)
  *   [data-parallax] > img                            → image drifts against the pointer
  *   .j13-btn                                         → soft ripple on press
- * Fine pointers only; nothing runs under reduced motion.
+ * Fine pointers only. Under reduced motion only the spotlight (a glow, no
+ * movement) stays; magnet, tilt and parallax are off.
  */
 
 const MAGNET = '[data-magnetic]';
@@ -37,7 +38,7 @@ export function useInteractions(rootRef, enabled = true) {
     };
     root.addEventListener('pointerdown', onDown);
 
-    if (reduced || !fine) {
+    if (!fine) {
       return () => root.removeEventListener('pointerdown', onDown);
     }
 
@@ -114,6 +115,11 @@ export function useInteractions(rootRef, enabled = true) {
         slab = nSlab;
         para = nPara;
 
+        if (reduced) {
+          magnet = null;
+          tilt = null;
+          para = null;
+        }
         if (magnet) {
           const r = magnet.getBoundingClientRect();
           const m = getMover(magnet, ['x', 'y'], 0.6);

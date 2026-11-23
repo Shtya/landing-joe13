@@ -5,8 +5,7 @@ import Logo from '../ui/Logo';
 
 /*
  * Footer. Brand and promise, three link columns, and a bottom bar with the
- * copyright and a back-to-top button. A giant outlined wordmark sits behind
- * it as a sign-off.
+ * copyright and a back-to-top button.
  */
 export default function Footer({ copy, sections, onNavigate }) {
   const f = copy.footer;
@@ -88,9 +87,6 @@ export default function Footer({ copy, sections, onNavigate }) {
           <Button variant="icon" size="md" label={copy.ui.backToTop} icon={<Glyph name="up" size={18} />} onClick={() => onNavigate('top')} />
         </div>
       </div>
-      <p className="j13-footer__mark" aria-hidden="true">
-        {copy.brand}
-      </p>
     </footer>
   );
 }

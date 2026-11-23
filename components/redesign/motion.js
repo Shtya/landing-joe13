@@ -7,7 +7,8 @@ import { SplitText } from 'gsap/SplitText';
 /*
  * Motion system. CSS mirrors the tokens (--ease-*, --t-*) in redesign.css.
  * Only transform and opacity are animated. Under prefers-reduced-motion every
- * pattern resolves to a short fade (or nothing) and scroll is native.
+ * pattern resolves to a short fade, numbers still count (faster), and scroll
+ * is native — lighter motion, never none.
  *
  * Scroll reveals — put data-reveal on any element:
  *   "up"      lifts 32px and fades in
@@ -42,10 +43,13 @@ export function countUp(el, { duration = 1.8, delay = 0 } = {}) {
   if (!el) return null;
   const target = el.dataset.value || '';
   const match = /^([\d.,]+)(.*)$/.exec(target);
-  if (!match || prefersReducedMotion()) {
+  if (!match) {
     el.textContent = target;
     return null;
   }
+  // Reduced motion: a quick count instead of a jump — a changing number is not
+  // the vestibular motion the setting protects against.
+  if (prefersReducedMotion()) duration = Math.min(duration, 0.8);
   const raw = match[1].replace(/,/g, '');
   const end = parseFloat(raw);
   const decimals = (raw.split('.')[1] || '').length;

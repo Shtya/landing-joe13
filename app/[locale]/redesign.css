@@ -824,8 +824,10 @@ html[data-theme='light'] .j13-noise {
 .j13-glass--solid {
   background: var(--glass-fill), linear-gradient(var(--glass-tint-strong), var(--glass-tint-strong));
 }
-/* no preserve-3d here: it would switch off the backdrop blur */
-[data-tilt] {
+/* no preserve-3d here: it would switch off the backdrop blur.
+   will-change only while hovered: a permanent layer per card cost memory and
+   compositing time for every card on the page. */
+[data-tilt]:hover {
   will-change: transform;
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -1496,6 +1498,15 @@ html.j13-has-cursor .j13-cursor__ring {
 .j13:not(.is-ready) [data-hero],
 .j13:not(.is-ready) .j13-hero__title {
   opacity: 0;
+  /* Failsafe: if the intro script never runs (a chunk blocked by a network
+     filter, a JS error), the hero still appears after 5s. A CSS animation
+     overrides GSAP's inline opacity, so this works even after gsap.set(). */
+  animation: j13-failsafe 0.6s ease 5s forwards;
+}
+@keyframes j13-failsafe {
+  to {
+    opacity: 1;
+  }
 }
 .j13-hero__title {
   font-size: var(--fs-hero);
@@ -1738,8 +1749,8 @@ html.j13-has-cursor .j13-cursor__ring {
 }
 .j13-stat__icon {
   position: absolute !important;
-  inset-block-start: 18px;
-  inset-inline-end: 18px;
+  inset-block-start: 20px;
+  inset-inline-end: 20px;
 }
 .j13-stat__value {
   font-family: var(--j13-font-display-latin), sans-serif;
@@ -1836,7 +1847,7 @@ html.j13-has-cursor .j13-cursor__ring {
   color: var(--text-3);
 }
 .j13-svc__icon {
-  margin: -16px;
+  margin: -8px;
   transition: transform 0.8s var(--ease-spring);
 }
 .j13-svc:hover .j13-svc__icon {
@@ -1848,7 +1859,7 @@ html.j13-has-cursor .j13-cursor__ring {
   padding-inline-end: 56px;
 }
 .j13-svc--strategy .j13-svc__icon {
-  --size: clamp(170px, 17vw, 270px) !important;
+  --size: clamp(190px, 20vw, 310px) !important;
   position: absolute !important;
   inset-block-start: 8%;
   inset-inline-end: 6%;
@@ -2269,8 +2280,8 @@ html.j13-has-cursor .j13-cursor__ring {
 }
 .j13-value__icon {
   position: absolute !important;
-  inset-block-start: 4px;
-  inset-inline-end: 4px;
+  inset-block-start: 18px;
+  inset-inline-end: 18px;
 }
 .j13-value p {
   color: var(--text-2);
@@ -3111,22 +3122,6 @@ textarea.j13-input {
   font-size: var(--fs-small);
   color: var(--text-3);
 }
-.j13-footer__mark {
-  margin-block-end: -0.22em;
-  text-align: center;
-  font-family: var(--j13-font-display-latin), sans-serif;
-  font-size: clamp(5rem, 22vw, 26rem);
-  font-weight: 700;
-  letter-spacing: -0.06em;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--line-2);
-  background: linear-gradient(180deg, rgba(var(--glow-rgb), 0.18), transparent 70%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  user-select: none;
-}
-
 /* Icon3D */
 .j13-icon3d {
   position: relative;
@@ -3135,13 +3130,13 @@ textarea.j13-input {
   width: var(--size);
   height: var(--size);
 }
+/* Square artwork (scripts/normalize-icons.cjs) fills its box exactly, so an
+   icon never spills past the card edge it is pinned to. */
 .j13-icon3d img {
   position: absolute;
-  inset: 50% auto auto 50%;
-  width: calc(var(--size) * 1.5);
-  max-width: none;
-  height: var(--size);
-  transform: translate(-50%, -50%);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   pointer-events: none;
 }
@@ -3319,12 +3314,10 @@ textarea.j13-input {
     gap: 12px;
   }
   .j13-stat__icon {
-    width: 40px !important;
-    height: 40px !important;
+    --size: 56px !important;
   }
   .j13-stat--0 .j13-stat__icon {
-    width: 80px !important;
-    height: 80px !important;
+    --size: 88px !important;
   }
   .j13-stat {
     padding: 18px;
@@ -3399,25 +3392,81 @@ textarea.j13-input {
   .j13-cursor {
     display: none;
   }
-  [data-tilt] {
+  [data-tilt]:hover {
     will-change: auto;
   }
 }
 
+/* Touch and phones: every control is at least 44×44px (WCAG 2.5.5, Apple HIG).
+   Mouse layouts are unchanged. */
+@media (pointer: coarse), (max-width: 767px) {
+  .j13-btn {
+    min-height: 44px;
+  }
+  .j13-tool {
+    min-width: 44px;
+    height: 44px;
+  }
+  .j13-choice span {
+    min-height: 44px;
+  }
+  .j13-footer .j13-navlink {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding-block: 0;
+  }
+}
+
+/* ?j13debug support badge (Diagnostics.jsx) */
+.j13-diag {
+  position: fixed;
+  inset-block-end: 12px;
+  inset-inline-start: 12px;
+  z-index: 2147483000;
+  max-width: min(560px, calc(100vw - 24px));
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #000;
+  color: #fff;
+  font: 12px/1.5 ui-monospace, Consolas, monospace;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.j13-diag p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.j13-diag b {
+  color: #7fd4ff;
+}
+
 /* ---------- 10. Reduced motion ------------------------------------------- */
+/* Windows turns this on with "Show animations" off, which "Adjust for best
+   performance", Remote Desktop and many company PCs also set. It used to cut
+   every animation and transition to 0.001ms, so on those PCs the site looked
+   completely static. Now motion is lighter, not gone: fades, colour changes
+   and the scroll reveals (as fades, see motion.js) stay; only continuous or
+   large movement stops. */
 @media (prefers-reduced-motion: reduce) {
   .j13,
-  .j13 *,
-  .j13 *::before,
-  .j13 *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+  .j13 * {
     scroll-behavior: auto !important;
+  }
+  .j13-orbs i,
+  .j13-pill__dot::after,
+  .j13-hint__arrow::after,
+  .j13-scrollcue__line i,
+  .j13-tower,
+  .j13-slab3__holo .j13-icon3d,
+  .j13-tower__beam i,
+  .j13-plan.is-featured .j13-plan__card::before {
+    animation: none !important;
   }
   .j13:not(.is-ready) [data-hero],
   .j13:not(.is-ready) .j13-hero__title {
     opacity: 1;
+    animation: none;
   }
   .j13-cursor,
   .j13-stars i + i {
@@ -3442,4 +3491,41 @@ textarea.j13-input {
   .j13-case {
     scroll-snap-align: start;
   }
+}
+
+/* ---------- 11. Off-screen sections -------------------------------------- */
+/* JoeRedesign marks sections out of view with [data-offscreen]; their
+   infinite CSS animations (marquee, beams, spinning border…) pause there. */
+.j13-section[data-offscreen] *,
+.j13-section[data-offscreen] *::before,
+.j13-section[data-offscreen] *::after {
+  animation-play-state: paused !important;
+}
+
+/* ---------- 12. Lite mode (components/redesign/perf.js) ------------------ */
+/* No GPU, Save-Data, low memory or <30fps: same design, cheaper rendering.
+   backdrop-filter over the moving backdrop is recomputed for every glass card
+   on every frame, so it becomes a solid tint; the drifting layers stop. */
+html.j13-lite .j13 *,
+html.j13-lite .j13 *::before,
+html.j13-lite .j13 *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html.j13-lite .j13-glass {
+  background: var(--glass-fill), linear-gradient(var(--glass-tint-strong), var(--glass-tint-strong));
+}
+html.j13-lite .j13-nav[data-scrolled] .j13-nav__bar,
+html.j13-lite .j13-rail,
+html.j13-lite .j13-scene__hint {
+  background: var(--surface-solid);
+}
+html.j13-lite .j13-orbs i,
+html.j13-lite .j13-stars i + i,
+html.j13-lite .j13-plan.is-featured .j13-plan__card::before {
+  animation: none !important;
+  will-change: auto;
+}
+html.j13-lite .j13-stars i {
+  will-change: auto;
 }

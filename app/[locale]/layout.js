@@ -2,52 +2,62 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import '../globals.css';
-
-const locales = ['en', 'ar'];
+import { getRedesignContent } from '@/components/redesign/content';
+import { LANG_CODE, LOCALES as locales, SITE_URL } from '@/lib/site';
 
 export function generateStaticParams() {
   return locales.map(locale => ({ locale }));
 }
 
-export async function generateMetadata({ params: { locale } }) {
-  const isAr = locale === 'ar';
+// Site-wide defaults. Each page sets its own title, description, canonical,
+// hreflang and share card (see app/[locale]/page.js). Favicons come from
+// app/favicon.ico, app/icon.png and app/apple-icon.png.
+export const metadata = {
+  metadataBase: new URL(SITE_URL),
+  applicationName: 'JOE13',
+  manifest: '/manifest.webmanifest',
+  formatDetection: { telephone: false, email: false, address: false },
+};
+
+// Organization + WebSite structured data, built from the same content the
+// page shows so the two never disagree.
+function structuredData(locale) {
+  const copy = getRedesignContent(locale);
+  // Skip template placeholders (hello@nexus.dev, +966-XXX-XXX) so search
+  // engines never get fake contact details.
+  const channel = icon => {
+    const value = copy.contact.channels.find(ch => ch.icon === icon)?.value;
+    return value && !/nexus\.dev|X{3}/i.test(value) ? value : undefined;
+  };
+  const sameAs = copy.footer.socials.map(so => so.href).filter(href => /^https?:\/\//.test(href || ''));
   return {
-    title: isAr ? 'نيكسوس | هندسة برمجيات متطورة' : 'Nexus | Premium Software Engineering',
-    description: isAr
-      ? 'نيكسوس تبني تطبيقات ويب وجوال وبنى تحتية سحابية عالمية المستوى.'
-      : 'Nexus builds world-class web apps, mobile applications, and cloud infrastructure that scale to millions.',
-    keywords: isAr
-      ? ['برمجيات', 'تطوير ويب', 'تطبيقات جوال', 'ذكاء اصطناعي', 'بنية سحابية']
-      : ['software engineering', 'web development', 'mobile apps', 'AI integration', 'cloud infrastructure'],
-    authors: [{ name: 'Nexus Dev Team' }],
-    openGraph: {
-      type: 'website',
-      locale: isAr ? 'ar_SA' : 'en_US',
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
-      title: isAr ? 'نيكسوس | هندسة برمجيات متطورة' : 'Nexus | Premium Software Engineering',
-      description: isAr
-        ? 'نيكسوس تبني برمجيات عالمية المستوى.'
-        : 'We build world-class software that scales to millions.',
-      siteName: 'Nexus',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: isAr ? 'نيكسوس | هندسة برمجيات متطورة' : 'Nexus | Premium Software Engineering',
-      description: isAr
-        ? 'نيكسوس تبني برمجيات عالمية المستوى.'
-        : 'We build world-class software that scales to millions.',
-    },
-    alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
-      languages: {
-        'en': `${process.env.NEXT_PUBLIC_SITE_URL}/en`,
-        'ar': `${process.env.NEXT_PUBLIC_SITE_URL}/ar`,
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}/#organization`,
+        name: copy.brand,
+        url: SITE_URL,
+        logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon-512.png`, width: 512, height: 512 },
+        image: `${SITE_URL}/og-image.png`,
+        description: copy.meta.description,
+        slogan: copy.tagline,
+        email: channel('mail') || undefined,
+        telephone: channel('phone') || undefined,
+        address: channel('pin') ? { '@type': 'PostalAddress', streetAddress: channel('pin'), addressCountry: 'SA' } : undefined,
+        // "Across the Gulf, Egypt, and the wider region" (Impact section).
+        areaServed: ['Saudi Arabia', 'United Arab Emirates', 'Kuwait', 'Qatar', 'Bahrain', 'Oman', 'Egypt'].map(name => ({ '@type': 'Country', name })),
+        ...(sameAs.length ? { sameAs } : {}),
       },
-    },
-    robots: {
-      index: true,
-      follow: true,
-    },
+      {
+        '@type': 'WebSite',
+        '@id': `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: copy.brand,
+        inLanguage: locales.map(l => LANG_CODE[l]),
+        publisher: { '@id': `${SITE_URL}/#organization` },
+      },
+    ],
   };
 }
 
@@ -58,25 +68,14 @@ export default async function LocaleLayout({ children, params: { locale } }) {
   const messages = await getMessages();
   const isRTL = locale === 'ar';
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Nexus Dev',
-    url: process.env.NEXT_PUBLIC_SITE_URL,
-    description: 'Premium software engineering company',
-    contactPoint: {
-      '@type': 'ContactPoint',
-      email: 'hello@nexus.dev',
-      contactType: 'customer service',
-    },
-  };
+  const jsonLd = structuredData(locale);
 
   return (
-    <html lang={locale} dir={isRTL ? 'rtl' : 'ltr'} suppressHydrationWarning>
+    <html lang={LANG_CODE[locale] || locale} dir={isRTL ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
         />
         <script
           dangerouslySetInnerHTML={{

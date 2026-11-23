@@ -22,7 +22,7 @@ export default function Services({ copy, index, headingId, onNavigate }) {
           <li key={it.key} className={`j13-glass j13-svc j13-svc--${it.key}`} data-tilt="3">
             <div className="j13-svc__top">
               <span className="j13-svc__num">{String(i + 1).padStart(2, '0')}</span>
-              <Icon3D name={it.icon} size={i === 0 ? 150 : 84} className="j13-svc__icon" />
+              <Icon3D name={it.icon} size={i === 0 ? 150 : 124} className="j13-svc__icon" />
             </div>
             <div className="j13-svc__body">
               <h3 className="j13-h3">{it.title}</h3>
